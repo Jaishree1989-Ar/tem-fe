@@ -1,0 +1,43 @@
+<section class="expense-summary ps-3 pe-2 py-1">
+    <div class="card-header d-flex align-items-center gap-2 mb-2">
+        <img src="../../../../../assets/dashboard/single-dollar.gif" alt="data" height="30" width="30">
+        <p class="m-0 dash-title">Expenses Summary - {{ chosenYearAndMonth }}</p>
+        <div>
+            <div class="icon-picker-container">
+                <button mat-icon-button (click)="dp.open()" aria-label="Open month and year picker">
+                    <mat-icon>event</mat-icon>
+                </button>
+                <input class="visually-hidden" [matDatepicker]="dp" [formControl]="selectedDate" [max]="maxDate">
+            </div>
+            <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)"
+                panelClass="month-year-picker">
+            </mat-datepicker>
+        </div>
+    </div>
+    <div>
+        <div class="table-responsive">
+            <table class="table table-borderless m-0">
+                <tbody>
+                    @if (expenseDetails.length > 0) {
+                    @for (item of expenseDetails; track item) {
+                    <tr class="border-bottom">
+                        <td class="fw-normal">{{ item.department }}</td>
+                        <td class="text-muted">
+                            <span class="carrier-count" matTooltip="View Details" (click)="openDialog(item)">
+                                {{ item.total }} USD
+                            </span>
+                        </td>
+                    </tr>
+                    }
+                    }
+                    @else{
+                    <div class="no-data-sec d-flex flex-column justify-content-center align-items-center ">
+                        <video src="assets/dashboard/no-data.mp4" autoplay muted playsinline height="170"></video>
+                        <p class="m-0">No data available.</p>
+                    </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

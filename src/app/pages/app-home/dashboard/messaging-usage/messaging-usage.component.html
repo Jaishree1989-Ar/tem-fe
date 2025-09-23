@@ -1,0 +1,49 @@
+<section class="message-usage ps-3 pe-2 py-1">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <img src="../../../../../assets/dashboard/message.gif" alt="data" height="35" width="35">
+        <p class="m-0 dash-title">Messaging Usage Statistics</p>
+    </div>
+    <div class="controls mt-3">
+        <form [formGroup]="controlForm" class="d-flex gap-2">
+            <mat-form-field appearance="outline">
+                <mat-label>Department</mat-label>
+                <mat-select formControlName="department" (selectionChange)="updateChart()">
+                    <mat-option *ngFor="let dept of distinctDepts" [value]="dept">
+                        {{ dept }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Carrier</mat-label>
+                <mat-select formControlName="carrier" (selectionChange)="updateChart()">
+                    <mat-option *ngFor="let carrier of distinctCars" [value]="carrier">
+                        {{ carrier }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker" formGroupName="dateRange" required [max]="maxDate">
+                    <input matStartDate placeholder="Start date" formControlName="start">
+                    <input matEndDate placeholder="End date" formControlName="end" (dateChange)="onRangeChange()">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+            <button mat-raised-button color="accent" class="mt-2" [disabled]="controlForm.invalid || !controlForm.dirty"
+                (click)="filterClicked()">Filter</button>
+        </form>
+    </div>
+    <div class="chartContent">
+        @if (this.wirelessReportDetails.length > 0) {
+        <echarts [options]="chartOptions" class="chart">
+        </echarts>
+        }
+        @else {
+        <div class="no-data-sec d-flex flex-column justify-content-center align-items-center ">
+            <video src="assets/dashboard/no-data.mp4" autoplay muted playsinline height="170"></video>
+            <p class="m-0">No data available.</p>
+        </div>
+        }
+    </div>
+</section>

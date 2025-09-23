@@ -1,0 +1,316 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'app/core/theme-essentials/less_variables.less';
+
+html {
+    scroll-behavior: smooth;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    font-family: Open Sans, system-ui, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+//*********************  Scrollbar Styling ******************//
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #91c2be8e;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.thin-scroll {
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background: #b8b9b9;
+        height: 200px !important;
+    }
+}
+
+//*********************  Scrollbar Styling ******************//
+
+
+//*********************  font Styling ******************//
+
+.fsmall {
+    font-size: 12px !important;
+}
+
+.fmedium {
+    font-size: 14px !important;
+    font-weight: 500;
+}
+
+.flarge {
+    font-size: 16px !important;
+    font-weight: 600;
+}
+
+.app-text-wrap {
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    white-space: normal;
+}
+
+.clr-primary {
+    color: @app-active-color;
+}
+
+.fWeight-low {
+    font-weight: 400 !important;
+}
+
+.fWeight-high {
+    font-weight: 600 !important;
+}
+
+.fWeight-medium {
+    font-weight: 500 !important;
+}
+
+//*********************  font Styling ******************//
+
+
+//********************* Toggle width style ******************//
+
+:root {
+    --sidenav-width: 175px; // <- already exists
+    --sidenav-collapsed-width: 60px; // <- we define a new one
+
+    .mat-mdc-icon-button.mat-mdc-button-base {
+        --mdc-icon-button-state-layer-size: 35px;
+        padding: 0;
+    }
+
+    .mat-mdc-icon-button .mat-icon {
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+    }
+}
+
+//********************* Toggle width style ******************//
+
+//********************* Disable Button *******************//
+button:disabled,
+button[disabled] {
+    cursor: not-allowed !important;
+    pointer-events: unset !important;
+}
+
+//********************* Disable Button *******************//
+
+
+
+//************** Cursor pointer ***********************//
+.cursor-pointer {
+    cursor: pointer;
+}
+
+//************** Cursor pointer ***********************//
+
+// Global button size override
+.mat-mdc-button,
+.mat-mdc-flat-button,
+.mat-mdc-stroked-button,
+.mat-mdc-outlined-button,
+.mat-mdc-raised-button {
+    font-size: 0.875rem !important;
+    font-weight: 550 !important;
+    padding: 9px 12px 10px 11px !important;
+    height: 29px !important;
+    line-height: 1rem !important;
+}
+
+.mat-mdc-dialog-actions .mat-button-base+.mat-button-base,
+.mat-mdc-dialog-actions .mat-mdc-button-base+.mat-mdc-button-base {
+    font-size: 0.875rem !important;
+    font-weight: 550 !important;
+    padding: 9px 12px 10px 11px !important;
+    height: 29px !important;
+    line-height: 1rem !important;
+}
+
+.mat-mdc-button {
+    border: 1px solid #c8c8c8 !important;
+}
+
+// .mat-mdc-text-field-wrapper {
+//     width: 100%;
+//     z-index: 0;
+//     height: 43px !important;
+//     display: flex !important;
+//     align-items: center !important;
+// }
+// .mat-mdc-form-field .mdc-notched-outline__notch {
+//     // border-left: 1px solid rgba(0, 0, 0, 0);
+//     display: flex;
+
+// }
+
+
+//********************* start up pages ******************//
+
+.startup-page {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0, 58, 73, 0.6), rgba(0, 58, 73, 0.6)), // overlay color
+        url(assets/startup-page/start-up-background.jpg);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .glassEffect {
+        background: rgba(5, 50, 52, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+    }
+
+
+    .login-btn {
+        border-radius: 10px !important;
+        transition: background 0.3s !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        color: #003A49 !important;
+
+        &:hover {
+            background-color: #f8e322 !important;
+        }
+    }
+
+    .mat-icon {
+        user-select: none;
+        background-repeat: no-repeat;
+        display: inline-block;
+        fill: currentColor;
+        height: 19px;
+        width: 23px;
+        font-size: 19px;
+        overflow: hidden;
+        color: #003a49ec;
+    }
+
+}
+
+//*********************  glass effect ******************//
+
+//*********************  tooltip styling ******************//
+.mat-mdc-tooltip-surface {
+    background-color: #fff !important;
+    color: #2b2b2b !important;
+    font-size: 12px !important;
+    border-radius: 4px !important;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.062) !important;
+    border: 1px solid #b8b8b8 !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    z-index: 1000 !important;
+    font-weight: 500 !important;
+}
+
+//*********************  tooltip styling ******************//
+
+
+//*********************  sub header ******************//
+section {
+    .header {
+        height: @app-sub-header-height;
+        // align-content: center;
+        padding: 10px 18px;
+        background: #f0f4f5;
+        border-bottom: 1px solid #05435012;
+
+        .headerText {
+            font-weight: 600;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+    }
+}
+
+//********************* sub header ******************//
+
+
+//******************* Snackbar style **********************
+
+/* Custom styles for snackbar types */
+.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+    padding: 0px !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+//******************* Snackbar style **********************
+//*********************  custom dialog ******************//
+.custom-dialog-position {
+    position: absolute !important;
+    top: 10%;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-title {
+    padding: 6px 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 19px !important;
+    border-bottom: solid 1px #0a606f1f !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-title+.mat-mdc-dialog-content {
+    padding-top: 0;
+    padding: 6px 24px !important;
+}
+
+.mat-mdc-dialog-surface {
+    overflow: hidden !important;
+
+}
+
+//*********************  custom dialog ******************//
+.ng-container {
+    padding: 20px 0;
+    overflow-x: hidden;
+    max-height: @content-height;
+    overflow-y: auto;
+}
+
+.mat-mdc-form-field-error {
+    font-size: 14px;
+    color: #ff3636 !important;
+}
+
+.dash-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    // color:@app-orange;
+}

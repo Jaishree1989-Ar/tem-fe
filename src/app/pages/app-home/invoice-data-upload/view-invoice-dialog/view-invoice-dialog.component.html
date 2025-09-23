@@ -1,0 +1,178 @@
+<div class="dialog-header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <div class="header-content d-flex align-items-center">
+            <mat-icon class="header-icon">receipt_long</mat-icon>
+            <div>
+                <h2 mat-dialog-title>Invoice detailed report</h2>
+                <p class="file-name" *ngIf="invoiceDetails">{{ invoiceDetails.batchDetails.name }}</p>
+            </div>
+        </div>
+        <button mat-icon-button mat-dialog-close class="close-icon-btn">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+
+<ng-container *ngIf="invoiceDetails">
+
+    <mat-dialog-content class="master-detail-content"
+        *ngIf="(invoiceDetails.batchDetails?.status === 'PENDING_APPROVAL' || invoiceDetails.batchDetails?.status === 'APPROVED'); else rejectedState">
+
+        <div class="master-pane">
+            <div class="list-header">
+                <h3 class="section-title">Invoice Records ({{invoiceDetails.invoiceRecords?.length}})</h3>
+                <app-filter-input class="table-head" placeholder="Search records..." [(value)]="filterValue"
+                    (valueChanged)="applyFilter($event)"></app-filter-input>
+            </div>
+            <mat-nav-list class="record-list">
+                <mat-list-item *ngFor="let record of dataSource.connect() | async" (click)="selectRecord(record)"
+                    [class.selected]="record === selectedRecord">
+                    <mat-icon matListItemIcon>person</mat-icon>
+                    <div matListItemTitle>{{record.userName || '-'}}</div>
+                    <div matListItemLine>{{record.wirelessNumber}}</div>
+                    <span class="list-item-amount">{{record.totalCurrentCharges}}</span>
+                </mat-list-item>
+            </mat-nav-list>
+        </div>
+
+        <div class="detail-pane">
+            <mat-card class="detail-card" *ngIf="selectedRecord; else noSelection">
+                <mat-card-header>
+                    <mat-icon mat-card-avatar>description</mat-icon>
+                    <mat-card-title>{{ selectedRecord.billingAccountName }}</mat-card-title>
+                    <mat-card-subtitle>Invoice #: {{ selectedRecord.invoiceNumber }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content class="detail-grid">
+                    <div class="detail-group">
+                        <h4 class="group-title">Account & User</h4>
+                        <div class="detail-item"><mat-icon>corporate_fare</mat-icon>
+                            <div><strong>FAN:</strong> {{selectedRecord.foundationAccount || '-'}}</div>
+                        </div>
+                        <div class="detail-item"><mat-icon>person</mat-icon>
+                            <div><strong>User:</strong> {{selectedRecord.userName || '-'}}</div>
+                        </div>
+                        <div class="detail-item"><mat-icon>phone_iphone</mat-icon>
+                            <div><strong>Wireless #:</strong> {{selectedRecord.wirelessNumber || '-'}}</div>
+                        </div>
+                        <div class="detail-item"><mat-icon>business</mat-icon>
+                            <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
+                        </div>
+                    </div>
+                    <div class="detail-group">
+                        <h4 class="group-title">Billing & Plan</h4>
+                        <div class="detail-item"><mat-icon>event</mat-icon>
+                            <div><strong>Invoice Date:</strong> {{selectedRecord.invoiceDate | date: 'longDate'}}</div>
+                        </div>
+                        <div class="detail-item"><mat-icon>today</mat-icon>
+                            <div><strong>Cycle End Date:</strong> {{selectedRecord.marketCycleEndDate | date:
+                                'longDate'}}
+                            </div>
+                        </div>
+                        <div class="detail-item"><mat-icon>article</mat-icon>
+                            <div><strong>Rate Plan:</strong> {{selectedRecord.ratePlanName}}</div>
+                        </div>
+                    </div>
+                    <div class="detail-group full-width">
+                        <h4 class="group-title">Charges and Usages</h4>
+                        <div class="charges-grid">
+                            <div class="charge-item"><span>Acc
+                                    Number:</span><strong>{{selectedRecord.accountNumber}}</strong></div>
+                            <div class="charge-item"><span>Rate Code:</span><strong>{{selectedRecord.rateCode}}</strong>
+                            </div>
+                            <div class="charge-item"><span>Last
+                                    Bill:</span><strong>{{selectedRecord.totalActivitySinceLastBill}}</strong></div>
+                            <div class="charge-item"><span>Fan
+                                    Level:</span><strong>{{selectedRecord.totalFanLevelCharges}}</strong></div>
+                            <div class="charge-item"><span>KB
+                                    Usage:</span><strong>{{selectedRecord.totalKbUsage}}</strong>
+                            </div>
+                            <div class="charge-item">
+                                <span>Messages:</span><strong>{{selectedRecord.totalMessages}}</strong>
+                            </div>
+                            <div class="charge-item">
+                                <span>Minutes:</span><strong>{{selectedRecord.totalMinutesUsage}}</strong>
+                            </div>
+                            <div class="charge-item" *ngIf="invoiceDetails.batchDetails?.carrier === 'FirstNet'">
+                                <span>MDA:</span><strong>{{selectedRecord.udl4}}</strong></div>
+                            <div class="charge-item" *ngIf="invoiceDetails.batchDetails?.carrier === 'AT&T Mobility'">
+                                <span>Asset Tag:</span><strong>{{selectedRecord.assetTag}}</strong></div>
+                        </div>
+                    </div>
+                    <div class="detail-group full-width">
+                        <h4 class="group-title">Charges Breakdown</h4>
+                        <div class="charges-grid">
+                            <div class="charge-item"><span>Monthly
+                                    Charges:</span><strong>{{selectedRecord.totalMonthlyCharges}}</strong></div>
+                            <div class="charge-item"><span>Taxes:</span><strong>{{selectedRecord.totalTaxes}}</strong>
+                            </div>
+                            <div class="charge-item">
+                                <span>Surcharges:</span><strong>{{selectedRecord.totalCompanyFeesAndSurcharges}}</strong>
+                            </div>
+                            <div class="charge-item">
+                                <span>Adjustments:</span><strong>{{selectedRecord.totalAdjustments}}</strong>
+                            </div>
+                            <div class="charge-item total"><span>Total
+                                    Charges:</span><strong>{{selectedRecord.totalCurrentCharges}}</strong></div>
+                            <div class="charge-item total"><span>Total
+                                    Reoccurring Charges:</span><strong>${{selectedRecord.totalReoccurringCharges}}</strong></div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <ng-template #noSelection>
+                <div class="empty-state">
+                    <mat-icon>arrow_back</mat-icon>
+                    <h2>Select an invoice record from the list to view its details.</h2>
+                </div>
+            </ng-template>
+        </div>
+    </mat-dialog-content>
+
+    <ng-template #rejectedState>
+        <mat-dialog-content class="rejection-info-content">
+            <mat-card class="rejection-card">
+                <mat-card-header>
+                    <mat-icon mat-card-avatar
+                        [color]="invoiceDetails.batchDetails?.status === 'REJECTED' ? 'warn' : 'primary'">
+                        {{ invoiceDetails.batchDetails?.status === 'REJECTED' ? 'cancel' : 'error' }}
+                    </mat-icon>
+                    <mat-card-title>
+                        {{ invoiceDetails.batchDetails?.status === 'REJECTED' ? 'Invoice Rejected' : 'Invoice Failed' }}
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        {{ invoiceDetails.batchDetails?.status === 'REJECTED' ? 'This invoice detailed report was rejected.' : 'This invoice detailed report could not be processed.' }}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="info-item" *ngIf="invoiceDetails.batchDetails?.reviewedBy">
+                        <mat-icon>person_check</mat-icon>
+                        <div>
+                            <strong>Reviewed By:</strong>
+                            <p>{{ invoiceDetails.batchDetails?.reviewedBy || '-' }}</p>
+                        </div>
+                    </div>
+                    <div class="info-item reason-item">
+                        <mat-icon>comment</mat-icon>
+                        <div>
+                            <strong>Reason:</strong>
+                            <p class="reason-text">{{ invoiceDetails.batchDetails?.rejectionReason ||
+                                invoiceDetails.batchDetails?.failureReason || 'No reason provided.' }}</p>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </mat-dialog-content>
+    </ng-template>
+</ng-container>
+
+<mat-dialog-actions align="end" *ngIf="invoiceDetails">
+    <button mat-button mat-dialog-close
+        *ngIf="invoiceDetails?.batchDetails?.status === 'PENDING_APPROVAL'">Cancel</button>
+    <button mat-button mat-dialog-close
+        *ngIf="invoiceDetails?.batchDetails?.status !== 'PENDING_APPROVAL'">Close</button>
+    <ng-container *ngIf="invoiceDetails.batchDetails?.status === 'PENDING_APPROVAL'">
+        <button mat-flat-button color="warn" (click)="onReject()">Reject</button>
+        <button mat-flat-button color="primary" (click)="onApprove()">Approve</button>
+    </ng-container>
+</mat-dialog-actions>

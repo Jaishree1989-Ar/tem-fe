@@ -1,0 +1,57 @@
+@import '../../../../../core/theme-essentials/less_variables.less';
+.carrier-details {
+
+    // Ex Panel
+    .mat-expansion-panel-header {
+        height: 40px !important;
+    }
+
+    .mat-expansion-panel-header.mat-expanded {
+        background-color: #f3fdff;
+    }
+
+    .mat-expansion-panel-header:hover {
+        background-color: #e7faff;
+    }
+
+    // .mat-expansion-panel-header.mat-expanded:hover {
+    //     background-color: #fff0e4c2;
+    // }
+
+    .mat-expansion-panel-header-title,
+    .mat-expansion-panel-header-description {
+        flex-grow: 2;
+    }
+
+    .mat-expansion-panel-header-description {
+        justify-content: end;
+    }
+
+    ::ng-deep .mat-expansion-panel-body {
+        background-color: #f3fdff;
+        padding: 0 10px 0 !important;
+    }
+
+    .mat-expansion-panel-spacing {
+        margin: 0;
+    }
+
+    .mat-expansion-panel:not([class*=mat-elevation-z]) {
+        box-shadow: none;
+    }
+
+    // List
+    .mdc-list-item.mdc-list-item--with-one-line {
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        border-left: 2px solid @app-accent-color;
+    }
+
+    .mdc-list {
+        padding: 0;
+    }
+
+    .mdc-list-item.mdc-list-item--with-one-line {
+        height: 30px;
+    }
+}

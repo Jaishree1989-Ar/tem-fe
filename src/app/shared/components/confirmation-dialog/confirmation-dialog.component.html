@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ data.title}}</h2>
+
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+  <div *ngIf="data.title === 'Confirm Rejection'" class="mt-3">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Rejection Reason</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        [(ngModel)]="rejectionReason"
+        required
+        placeholder="Enter reason for rejection"
+      ></textarea>
+      <mat-error *ngIf="!rejectionReason.trim()">Rejection reason is required</mat-error>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">{{ data.cancelText || 'Cancel' }}</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="data.title === 'Confirm Rejection' && !rejectionReason.trim()">{{ data.confirmText || 'Confirm' }}</button>
+</mat-dialog-actions>

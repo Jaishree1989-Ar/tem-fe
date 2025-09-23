@@ -1,0 +1,20 @@
+<section class="carrier-details">
+    <h1 mat-dialog-title>{{ data.department }}</h1>
+
+    <div mat-dialog-content>
+        <table class="table table-sm m-0">
+            <tbody>
+                @for (invoices of data.invoices; track invoices) {
+                <tr>
+                    <td>{{ invoices.wirelessNumber }} (<span class="acc">{{ invoices.userName}}</span>)</td>
+                    <td class="text-center text-muted">{{ invoices.total }} USD</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div mat-dialog-actions class="pe-4" align="end">
+        <button mat-stroked-button mat-dialog-close class="">Close</button>
+    </div>
+</section>

@@ -1,0 +1,84 @@
+@import '../../../../core/theme-essentials/less_variables.less';
+
+.carrier-sec {
+    border-radius: 10px;
+    box-shadow: rgb(63 63 63 / 10%) 0px 0px 20px 0px;
+
+    .card-header {
+        height: 45px;
+    }
+
+    .table-responsive {
+        height: 250px;
+
+        table {
+            max-height: 200px;
+            overflow-y: auto;
+
+            tr.custom-divider:not(:last-child) {
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            tr.border-bottom {
+                border-left: 3px solid transparent;
+                transition: border-left 0.4s;
+            }
+
+            tr.border-bottom:nth-child(odd):hover {
+                border-left: 3px solid @app-secondary-color-1;
+            }
+
+            tr.border-bottom:nth-child(even):hover {
+                border-left: 3px solid @app-accent-color;
+            }
+
+            .carrier-count {
+                cursor: pointer;
+                padding: 1px 10px;
+                background-color: @app-accent-color;
+                color: @app-secondary-color-1;
+                border-radius: 10px;
+                box-shadow: rgb(229 191 36 / 30%) 0px 0px 10px 0px, rgb(229 191 36 / 30%) 0px 0px 10px 0px;
+                transition: box-shadow 0.4s ease;
+            }
+
+            .carrier-count:hover {
+                background-color: #e5bf24;
+                box-shadow: rgb(229 191 36 / 50%) 0px 0px 10px 0px, rgb(229 191 36 / 50%) 0px 0px 10px 0px;
+                // animation: horizontalshaking 1s;
+            }
+
+            .no-data-sec {
+                p {
+                    font-size: 14px;
+                    color: #bb9600;
+                    font-weight: 500;
+                    position: relative;
+                    top: -30px;
+                }
+            }
+
+            // @keyframes horizontalshaking {
+            //     0% {
+            //         transform: translateX(0)
+            //     }
+
+            //     25% {
+            //         transform: translateX(5px)
+            //     }
+
+            //     50% {
+            //         transform: translateX(-5px)
+            //     }
+
+            //     75% {
+            //         transform: translateX(5px)
+            //     }
+
+            //     100% {
+            //         transform: translateX(0)
+            //     }
+            // }
+        }
+    }
+}

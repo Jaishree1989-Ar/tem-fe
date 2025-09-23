@@ -1,0 +1,111 @@
+@import "../../../core/theme-essentials/less_variables.less";
+
+@header-text-hover-color: #e7e8e7;
+
+.container-custom {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+    background-size: cover;
+    background-position: left 50% bottom 30%;
+    backdrop-filter: blur(3px);
+    width: 100%;
+
+    .header {
+
+        .title {
+            color: @white !important;
+
+            .jcl-logo {
+                width: auto;
+                height: 23px;
+            }
+
+            .python-logo {
+                width: auto;
+                height: 23px;
+            }
+
+            .title-follow-up {
+                border: 1px solid #c8cad6 !important;
+                border-radius: 6px;
+                padding: 4px 8px;
+            }
+        }
+
+        .head {
+            align-content: center;
+
+            .first-div {
+                gap: 8px;
+                cursor: pointer;
+
+                .myprofile-drpdwn {
+                    text-decoration: none;
+
+                    p.user-name {
+                        color: @header-text-hover-color;
+                        letter-spacing: 0.08rem;
+                        font-size: 0.9em;
+                        margin: 0px 8px;
+                        display: inline;
+                    }
+
+                    img {
+                        max-height: 40px;
+                    }
+                }
+            }
+
+
+            .nameDetails {
+                color: @white;
+                white-space: nowrap;
+                overflow: hidden;
+                // max-width: 140px;
+
+                .nameText {
+                    font-size: 14px;
+                    color: @white;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: block;
+                }
+
+                .mailText {
+                    font-size: 12px;
+                    color: #ffffffb8;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: block;
+                }
+            }
+        }
+    }
+
+    button.menu {
+        text-decoration: none;
+        color: #c8cad6 !important;
+        margin-right: 1.3rem;
+        font-size: medium;
+    }
+
+    .mat-toolbar-row,
+    .mat-toolbar-single-row {
+        height: 45px;
+    }
+
+    .mat-toolbar.mat-accent {
+        background: @app-secondary-color-2;
+    }
+
+    ::ng-deep .mat-mdc-menu-item .mat-icon {
+        margin-right: 10px !important;
+        overflow: visible !important;
+    }
+
+    ::ng-deep .mat-mdc-menu-item .mdc-list-item__primary-text {
+        font-size: 14px;
+    }
+}

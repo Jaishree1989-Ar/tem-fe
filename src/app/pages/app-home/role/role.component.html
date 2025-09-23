@@ -1,0 +1,93 @@
+<section class="role-section">
+    <div class="header row align-items-center">
+        <div class="col">
+            <header class="headerText">Role</header>
+        </div>
+        <div class="col">
+            <add-button label="Create Role" color="accent" icon="add_circle" class="float-end"
+                (clicked)="createRole()"></add-button>
+        </div>
+    </div>
+    <div class="p-3">
+        <!-- <mat-form-field appearance="outline" class="filter-field">
+                <mat-icon matPrefix>search</mat-icon>
+                <input matInput (keyup)="applyFilter($event)" placeholder="search..." #input
+                    [(ngModel)]="filterValue" />
+                <button *ngIf="filterValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter(input)">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field> -->
+
+        <app-filter-input placeholder="Search Products" [(value)]="filterValue" #input
+            (valueChanged)="applyFilter($event)"></app-filter-input>
+
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="roleName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> role Name </th>
+                    <td mat-cell *matCellDef="let row"> {{row.roleName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="moduleAccessList">
+                    <th mat-header-cell *matHeaderCellDef> Module Access </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="custom-chip-list">
+                            <div class="custom-chip" *ngFor="let moduleAccess of row.moduleAccessList"
+                                matTooltip="{{ moduleAccess.accessType }}">
+                                {{ moduleAccess.moduleName }}
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> description </th>
+                    <td mat-cell *matCellDef="let row">
+                        {{ row.description != null ? row.description!='' ? row.description : 'N/A' : 'N/A' }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="d-flex actions-btns">
+                            <div class="edit-btn" matTooltip="Edit Role">
+                                <button [disabled]="accessType == 'READ'" mat-icon-button color="primary"
+                                    (click)="editRole(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </div>
+                            <div class="delete-btn" matTooltip="Delete Role">
+                                <button [disabled]="accessType == 'READ'" mat-icon-button color="warn"
+                                    (click)="deleteRole(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row no-data" *matNoDataRow>
+                    <td class="mat-cell text-center py-3" *ngIf="this.dataSource.data.length!= 0"
+                        [attr.colspan]="displayedColumns.length">
+                        No data matching
+                        the search criteria.
+                        <span> "{{input.value}}"</span>.
+                    </td>
+                    <td class="mat-cell text-center py-3" *ngIf="this.dataSource.data.length=== 0"
+                        [attr.colspan]="displayedColumns.length">
+                        No data available in table.
+                    </td>
+                </tr>
+
+            </table>
+            <mat-paginator [hidden]="dataSource.data.length === 0 || dataSource.filteredData.length === 0"
+                [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users">
+            </mat-paginator>
+
+        </div>
+    </div>
+</section>

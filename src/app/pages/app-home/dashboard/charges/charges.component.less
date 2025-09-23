@@ -1,0 +1,161 @@
+@import '../../../../core/theme-essentials/less_variables.less';
+
+::ng-deep .month-year-picker .mat-calendar-period-button {
+    pointer-events: none;
+    cursor: default;
+    opacity: .55;
+}
+
+.charges-sec {
+    box-shadow: rgb(63 63 63 / 10%) 0px 0px 20px 0px;
+    border-radius: 10px;
+
+    .table-responsive {
+        border: 1px solid #c5c5c5;
+        border-radius: 7px;
+
+        table {
+
+            .mat-mdc-header-row {
+                height: 43px;
+                background: #eff5f5;
+                color: #04424fd6;
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: 550;
+            }
+
+            ::ng-deep .mat-sort-header-container {
+                justify-content: center;
+            }
+
+            .mat-mdc-cell {
+                border-bottom-color: #dadada
+            }
+
+            .mat-mdc-row,
+            .mdc-data-table__content {
+                border-bottom: 1px solid #dadada;
+                height: 47px;
+            }
+
+            th.mat-column-department {
+                width: 10%;
+            }
+
+            th.mat-column-group_usage,
+            th.mat-column-group_access,
+            th.mat-column-group_equipment,
+            th.mat-column-group_other,
+            th.mat-column-carrier,
+            th.mat-column-account,
+            th.mat-column-usageChargesAverage,
+            th.mat-column-accessChargesAverage,
+            th.mat-column-equipmentChargesAverage,
+            th.mat-column-otherChargesAverage {
+                text-align: center;
+                border-left: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+            th.mat-column-usageChargesAverage,
+            th.mat-column-accessChargesAverage,
+            th.mat-column-equipmentChargesAverage,
+            th.mat-column-otherChargesAverage {
+                border-right: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+            td.mat-column-carrier,
+            td.mat-column-account,
+            td.mat-column-usageChargesAverage,
+            td.mat-column-accessChargesAverage,
+            td.mat-column-equipmentChargesAverage,
+            td.mat-column-otherChargesAverage {
+                text-align: center;
+                border-left: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+            td.mat-column-usageChargesAverage,
+            td.mat-column-accessChargesAverage,
+            td.mat-column-equipmentChargesAverage,
+            td.mat-column-otherChargesAverage {
+                border-right: 1px solid rgba(0, 0, 0, 0.12);
+            }
+
+            td.mat-column-usageChargesTotal,
+            td.mat-column-accessChargesTotal,
+            td.mat-column-equipmentChargesTotal,
+            td.mat-column-otherChargesTotal {
+                text-align: center;
+            }
+
+            ::ng-deep.mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+                cursor: pointer;
+                height: 30px;
+                width: 70px;
+                display: flex;
+                padding: 0px 11px;
+                align-items: center;
+            }
+
+            ::ng-deep.mat-mdc-paginator-range-label {
+                margin: 0 15px 0 4px;
+                font-size: 14px;
+            }
+
+            ::ng-deep.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input {
+                font-size: 15px;
+                display: flex;
+            }
+
+            ::ng-deep.mat-mdc-paginator-page-size-label {
+                margin: 0 4px;
+                color: #828282;
+                font-size: 14px;
+            }
+
+            ::ng-deep.mat-mdc-select {
+                display: flex;
+                width: 100%;
+                font-size: 14px;
+                outline: none;
+            }
+
+            ::ng-deep.mat-mdc-icon-button {
+                border: 1px solid #e0e0e0;
+                display: flex;
+                padding: 0px;
+                align-items: center;
+                justify-content: center;
+                height: 31px;
+                width: 33px;
+                border-radius: 5px;
+                margin: 2px;
+            }
+
+            tr.example-detail-row {
+                height: 0;
+            }
+
+            .example-element-row td {
+                border-bottom-width: 0;
+            }
+
+            .example-element-detail {
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+            }
+
+            .no-data {
+                background-color: #fefbf2;
+                font-size: 15px;
+                color: #bb9600;
+
+                span {
+                    font-weight: 500;
+                }
+            }
+
+        }
+    }
+}

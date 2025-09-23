@@ -1,0 +1,33 @@
+<section class="carrier-sec ps-3 pe-2 py-1">
+    <div class="card-header d-flex align-items-center gap-2 mb-2">
+        <img src="../../../../../assets/dashboard/building.gif" alt="data" height="30" width="30">
+        <p class="m-0 dash-title">Carriers Summary</p>
+    </div>
+    <div>
+        <div class="table-responsive">
+            <table class="table table-borderless m-0">
+                <tbody>
+                    <!-- @if (departmentWiseData.length > 0) {
+                    @for (item of departmentWiseData; track item) {
+                    <tr class="border-bottom">
+                        <td class="fw-normal">{{ item.department }}</td>
+                        <td class="text-muted">
+                            <span class="carrier-count" matTooltip="View Details"
+                                (click)="openDialog(item.department, item.carriers)">
+                                {{ item.totalPlans }} {{ item.totalPlans > 1 ? 'plans' : 'plan' }}
+                            </span>
+                        </td>
+                    </tr>
+                    }
+                    }
+                    @else{ -->
+                    <div class="no-data-sec d-flex flex-column justify-content-center align-items-center ">
+                        <video src="assets/dashboard/no-data.mp4" autoplay muted playsinline height="170"></video>
+                        <p class="m-0">No data available.</p>
+                    </div>
+                    <!-- } -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

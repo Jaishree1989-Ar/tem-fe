@@ -1,0 +1,93 @@
+<section class="user-section">
+    <div class="header row align-items-center">
+        <div class="col">
+            <header class="headerText">User</header>
+        </div>
+        <div class="col">
+            <add-button label="Create User" color="accent" icon="person_add" class="float-end"
+                (clicked)="createUser()"></add-button>
+        </div>
+    </div>
+    <div class="p-3">
+        <app-filter-input placeholder="Search users by name, email, etc..." [(value)]="filterValue" #input
+            (valueChanged)="applyFilter($event)"></app-filter-input>
+
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <!-- User Name Column -->
+                <ng-container matColumnDef="userName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+                    <td mat-cell *matCellDef="let row"> {{row.userName}} </td>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                    <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+                </ng-container>
+
+                <!-- Phone Number Column -->
+                <ng-container matColumnDef="phoneNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>
+                    <td mat-cell *matCellDef="let row"> {{row.phoneNumber || 'N/A'}} </td>
+                </ng-container>
+
+                <!-- Role Column -->
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                    <td mat-cell *matCellDef="let row"> {{row.roleName || 'N/A'}} </td>
+                </ng-container>
+
+                <!-- City Column -->
+                <ng-container matColumnDef="city">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+                    <td mat-cell *matCellDef="let row"> {{row.cityName || 'N/A'}} </td>
+                </ng-container>
+
+                <!-- Department Column -->
+                <ng-container matColumnDef="department">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
+                    <td mat-cell *matCellDef="let row"> {{row.deptName || 'N/A'}} </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="d-flex actions-btns">
+                            <div class="edit-btn" matTooltip="Edit User">
+                                <button [disabled]="accessType == 'READ'" mat-icon-button color="primary"
+                                    (click)="editUser(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </div>
+                            <div class="delete-btn" matTooltip="Delete User">
+                                <button [disabled]="accessType == 'READ'" mat-icon-button color="warn"
+                                    (click)="deleteUser(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row no-data" *matNoDataRow>
+                    <td class="mat-cell text-center py-3" *ngIf="filterValue" [attr.colspan]="displayedColumns.length">
+                        No data matching the search criteria "{{filterValue}}".
+                    </td>
+                    <td class="mat-cell text-center py-3" *ngIf="!filterValue" [attr.colspan]="displayedColumns.length">
+                        No data available in table.
+                    </td>
+                </tr>
+            </table>
+            <mat-paginator [hidden]="dataSource.data.length === 0 || dataSource.filteredData.length === 0"
+                [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users">
+            </mat-paginator>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,160 @@
+<section class="telecom-reports">
+    <div class="header row align-items-center">
+        <div class="col">
+            <header class="headerText">Telecom Reports</header>
+        </div>
+        <div></div>
+    </div>
+    <div class="p-3">
+        <div class="d-flex filter-sec">
+            <form [formGroup]="filterForm" class="d-flex gap-3 ">
+                <mat-form-field appearance="outline">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="departments" multiple>
+                        <mat-option *ngFor="let option of distinctDepts" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Carrier</mat-label>
+                    <mat-select formControlName="carriers" multiple>
+                        <mat-option *ngFor="let option of distinctCars" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Device Class</mat-label>
+                    <mat-select formControlName="deviceClass" multiple>
+                        <mat-option *ngFor="let option of distinctDeviceClass" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker" formGroupName="dateRange">
+                        <input matStartDate placeholder="Start date" formControlName="start" />
+                        <input matEndDate placeholder="End date" formControlName="end" />
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+                <div class="d-flex justify-content-center pt-1">
+                    <button mat-stroked-button class="ms-2" [disabled]="!isAnyFieldSelected()"
+                        (click)="resetFilters()">Refresh</button>
+                    <button mat-raised-button color="accent" class="ms-2" [disabled]="!isAnyFieldSelected()"
+                        (click)="filterClicked()">Filter</button>
+                </div>
+            </form>
+        </div>
+        <div class="d-flex">
+            <app-filter-input placeholder="Search Reports" [(value)]="filterValue" #input
+                (valueChanged)="applyFilter($event)"></app-filter-input>
+            <div class="col d-flex justify-content-end ">
+                <button mat-raised-button color="accent" [disabled]="dataSource.data.length < 1"
+                    (click)="exportReport()" matTooltip="Export to XLSX">
+                    Export
+                </button>
+            </div>
+            <!-- <div class="vert-divider"></div> -->
+        </div>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort class="mat-elevation-z8">
+                @for (column of displayedColumns; track column) {
+                <ng-container matColumnDef="{{column}}">
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> {{column | camelCaseToTitlePipe}} </th>
+                    <td mat-cell *matCellDef="let element">
+                        @if (column != 'carrier') {
+                        {{element[column]}}
+                        }
+                        @else {
+                        <div class="custom-chip-list">
+                            <div class="custom-chip" matTooltip="{{ element.carrier}}">
+                                {{ element.carrier }}
+                            </div>
+                        </div>
+                        }
+                    </td>
+                </ng-container>
+                }
+                <ng-container matColumnDef="expand">
+                    <th mat-header-cell *matHeaderCellDef aria-label="row actions">Actions</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="d-flex actions-btns">
+                            <div class="edit-btn me-1" matTooltip="Edit Details">
+                                <button mat-icon-button [disabled]="accessType == 'READ'" color="primary"
+                                    (click)="editDetails(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </div>
+                            <div class="expand-btn">
+                                <button mat-icon-button aria-label="expand row"
+                                    [matTooltip]="expandedElement === element ? 'Collapse' : 'Expand' "
+                                    (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                                    @if (expandedElement === element) {
+                                    <mat-icon>keyboard_arrow_up</mat-icon>
+                                    } @else {
+                                    <mat-icon>keyboard_arrow_down</mat-icon>
+                                    }
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="kv-container my-3">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="kv-row" *ngFor="let column of overallColumnArr1">
+                                            <div class="col-5">{{column | camelCaseToTitlePipe}} </div>
+                                            <div class="col-1">: </div>
+                                            <div class="col-6">{{ element[column] == null ? "-" : element[column] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="kv-row" *ngFor="let column of overallColumnArr2">
+                                            <div class="col-5">{{column | camelCaseToTitlePipe}} </div>
+                                            <div class="col-1">: </div>
+                                            <div class="col-6">{{ element[column] == null ? "-" : element[column] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+                <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element">
+                </tr> <!--(click)="onRowClick($event, element)"-->
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+                <tr class="mat-row no-data" *matNoDataRow>
+                    <td class="mat-cell text-center py-3" *ngIf="this.dataSource.data.length!= 0"
+                        [attr.colspan]="displayedColumns.length + 1">
+                        No data matching
+                        the search criteria.
+                        <span> "{{input.value}}"</span>.
+                    </td>
+                    <td class="mat-cell text-center py-3" *ngIf="this.dataSource.data.length=== 0"
+                        [attr.colspan]="displayedColumns.length + 1">
+                        No data available in table.
+                    </td>
+                </tr>
+            </table>
+            <mat-paginator [hidden]="dataSource.data.length === 0 || dataSource.filteredData.length === 0"
+                [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users">
+            </mat-paginator>
+        </div>
+    </div>
+</section>

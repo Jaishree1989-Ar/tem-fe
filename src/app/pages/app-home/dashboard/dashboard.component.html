@@ -1,0 +1,38 @@
+<section class="dashboard-sec">
+    <div class="header d-flex align-items-center">
+        <header class="headerText me-2">Dashboard</header>
+        <div class="col-auto d-flex align-items-center">
+            <mat-form-field appearance="outline" class="me-2">
+                <mat-label>Select Carrier</mat-label>
+                <mat-select [(ngModel)]="selectedCarrier">
+                    @for (carrier of distinctCars; track carrier) {
+                    <mat-option [value]="carrier">{{ carrier }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="p-3 row flex-column align-items-center gap-3">
+        <div class="first-sec row gap-3 px-2 py-0">
+            <div class="col p-0">
+                <app-carriers-by-department></app-carriers-by-department>
+            </div>
+            <div class="col p-0">
+                <app-expense-summary [selectedCarrier]="selectedCarrier"></app-expense-summary>
+            </div>
+        </div>
+        <div class="charges-sec row px-2 py-0">
+            <div class="p-0">
+                <app-charges></app-charges>
+            </div>
+        </div>
+        <div class="usage-sec row gap-3 px-2 py-0">
+            <div class="col p-0">
+                <app-data-usage></app-data-usage>
+            </div>
+            <div class="col p-0">
+                <app-messaging-usage></app-messaging-usage>
+            </div>
+        </div>
+    </div>
+</section>

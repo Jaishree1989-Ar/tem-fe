@@ -1,0 +1,86 @@
+<div class="dialog-header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <div class="header-content d-flex align-items-center">
+            <h2 mat-dialog-title>Upload Department Data</h2>
+        </div>
+        <button mat-icon-button [mat-dialog-close]="null" class="close-icon-btn">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div mat-dialog-content class="d-flex flex-column gap-3">
+    <div>
+        <p class="mb-2">First, please select the carrier.</p>
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Select Carrier</mat-label>
+            <mat-select [formControl]="carrier" required>
+                <mat-option *ngFor="let option of distinctCars" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="carrier.hasError('required')">Carrier is required.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <p class="mb-2">Next, choose the file to upload.</p>
+        <ng-container *ngIf="!selectedFile; else showSelectedFile">
+            <div class="content-outer d-flex justify-content-center align-items-center"
+                [class.file-hover]="isFileHovered" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                (drop)="onFileDrop($event)">
+
+                <input type="file" class="file-input" accept=".xlsx,.csv" (change)="onFileSelected($event)" #fileUpload
+                    hidden />
+
+                <div class="file-upload d-flex gap-1 align-items-center flex-column">
+                    <img src="../../../../assets/invoice/upload.gif" alt="Upload Icon" height="50" width="50"
+                        (click)="fileUpload.click()">
+                    <div class="drop-info">
+                        <span class="hint-text" (click)="fileUpload.click()">Click here to upload</span> or drag & drop
+                        here
+                    </div>
+                    <div class="file-types">
+                        XLSX or CSV files are accepted
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #showSelectedFile>
+            <div class="uploaded-files">
+                <div class="file d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <div>
+                            <ng-container [ngSwitch]="checkFileType()">
+                                <img *ngSwitchCase="'csv'" src="../../../../assets/invoice/csv3.png" alt="CSV Icon"
+                                    height="40" width="40" />
+                                <img *ngSwitchCase="'xlsx'" src="../../../../assets/invoice/xlsx3.png" alt="Excel Icon"
+                                    height="40" width="40" />
+                                <img *ngSwitchDefault src="../../../../assets/invoice/unknown.png" alt="File Icon"
+                                    height="40" width="40" />
+                            </ng-container>
+                        </div>
+                        <div class="file-name">
+                            <p class="m-0">{{ fileName }}</p>
+                            <p class="m-0 size">{{ fileSize }}</p>
+                        </div>
+                    </div>
+
+                    <div class="file-delete">
+                        <button mat-icon-button color="warn" (click)="removeSelectedFile()" matTooltip="Remove File">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onUpload()" [disabled]="!selectedFile || carrier.invalid">
+        <mat-icon>upload</mat-icon>
+        Upload
+    </button>
+</mat-dialog-actions>

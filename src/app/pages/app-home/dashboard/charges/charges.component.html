@@ -1,0 +1,123 @@
+<div class="charges-sec ps-3 pe-2 py-1">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <img src="../../../../../assets/dashboard/dollar.gif" alt="data" height="30" width="30">
+        <p class="m-0 dash-title">Charges - {{ chosenYearAndMonth }}</p>
+        <div>
+            <div class="icon-picker-container">
+                <button mat-icon-button (click)="dp.open()" aria-label="Open month and year picker">
+                    <mat-icon>event</mat-icon>
+                </button>
+                <input class="visually-hidden" [matDatepicker]="dp" [formControl]="selectedDate" [max]="maxDate">
+            </div>
+            <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)"
+                panelClass="month-year-picker">
+            </mat-datepicker>
+        </div>
+
+    </div>
+    <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- These are the headers for the groups, using colspan -->
+            <ng-container matColumnDef="group_empty">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"></th>
+            </ng-container>
+            <ng-container matColumnDef="group_usage">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center">Usage</th>
+            </ng-container>
+            <ng-container matColumnDef="group_access">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center">Access</th>
+            </ng-container>
+            <ng-container matColumnDef="group_equipment">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center">Equipment</th>
+            </ng-container>
+            <ng-container matColumnDef="group_other">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center">Other</th>
+            </ng-container>
+
+            <!-- Department Column -->
+            <ng-container matColumnDef="department">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" mat-sort-header> Department </th>
+                <td mat-cell *matCellDef="let row"> {{row.department}} </td>
+            </ng-container>
+
+            <!-- Carrier Column -->
+            <ng-container matColumnDef="carrier">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" mat-sort-header> Carrier </th>
+                <td mat-cell *matCellDef="let row"> {{row.carrier}} </td>
+            </ng-container>
+
+            <!-- Account Column -->
+            <ng-container matColumnDef="account">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" mat-sort-header> Account </th>
+                <td mat-cell *matCellDef="let row"> {{row.account}} </td>
+            </ng-container>
+
+            <!-- usageChargesAverage Column -->
+            <ng-container matColumnDef="usageChargesAverage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Usage Avg </th>
+                <td mat-cell *matCellDef="let row"> {{row.usageChargesAverage}} </td>
+            </ng-container>
+
+            <!-- usageChargesTotal Column -->
+            <ng-container matColumnDef="usageChargesTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Usage Total </th>
+                <td mat-cell *matCellDef="let row"> {{row.usageChargesTotal}} </td>
+            </ng-container>
+
+            <!-- accessChargesAverage Column -->
+            <ng-container matColumnDef="accessChargesAverage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Access Avg </th>
+                <td mat-cell *matCellDef="let row"> {{row.accessChargesAverage}} </td>
+            </ng-container>
+
+            <!-- accessChargesTotal Column -->
+            <ng-container matColumnDef="accessChargesTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Access Total </th>
+                <td mat-cell *matCellDef="let row"> {{row.accessChargesTotal}} </td>
+            </ng-container>
+
+            <!-- equipmentChargesAverage Column -->
+            <ng-container matColumnDef="equipmentChargesAverage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipment Avg </th>
+                <td mat-cell *matCellDef="let row"> {{row.equipmentChargesAverage}} </td>
+            </ng-container>
+
+            <!-- equipmentChargesTotal Column -->
+            <ng-container matColumnDef="equipmentChargesTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipment Total </th>
+                <td mat-cell *matCellDef="let row"> {{row.equipmentChargesTotal}} </td>
+            </ng-container>
+
+            <!-- otherChargesAverage Column -->
+            <ng-container matColumnDef="otherChargesAverage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Other Avg </th>
+                <td mat-cell *matCellDef="let row"> {{row.otherChargesAverage}} </td>
+            </ng-container>
+
+            <!-- otherChargesTotal Column -->
+            <ng-container matColumnDef="otherChargesTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Other Total </th>
+                <td mat-cell *matCellDef="let row"> {{row.otherChargesTotal}} </td>
+            </ng-container>
+
+            <!-- Table rows -->
+            <tr mat-header-row *matHeaderRowDef="groupedColumns"></tr>
+            <tr mat-header-row *matHeaderRowDef="secondHeaderRowColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- No data row -->
+            <tr class="mat-row no-data" *matNoDataRow>
+                <td class="mat-cell text-center py-3" [attr.colspan]="displayedColumns.length">
+                    <video src="assets/dashboard/no-data.mp4" autoplay muted playsinline height="200"></video>
+                    <p class="p-0">No data available in table.</p>
+                </td>
+            </tr>
+
+        </table>
+
+        <mat-paginator [hidden]="dataSource.data.length === 0 || dataSource.filteredData.length === 0" [pageSize]="5"
+            [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users">
+        </mat-paginator>
+    </div>
+</div>

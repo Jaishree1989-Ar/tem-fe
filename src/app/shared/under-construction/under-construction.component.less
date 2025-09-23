@@ -1,0 +1,25 @@
+@import '../../core/theme-essentials/less_variables.less';
+
+.container-fluid {
+    height: calc(@content-height - @app-sub-header-height);
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.under-construction {
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        max-width: 30%;
+        height: auto;
+        object-fit: contain;
+    }
+}

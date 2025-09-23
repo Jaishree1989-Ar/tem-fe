@@ -1,0 +1,27 @@
+<section class="carrier-details">
+    <h1 mat-dialog-title>{{ data.department }}</h1>
+
+    <div mat-dialog-content>
+        <mat-accordion multi>
+            @for (carrier of data.carriers; track carrier) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>{{ carrier.carrier }}</mat-panel-title>
+                    <mat-panel-description>{{ carrier.plans.length }} plans</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div>
+                    <mat-list role="list">
+                        @for (plan of carrier.plans; track plan) {
+                        <mat-list-item role="listitem">{{plan}}</mat-list-item>
+                        }
+                    </mat-list>
+                </div>
+            </mat-expansion-panel>
+            }
+        </mat-accordion>
+    </div>
+
+    <div mat-dialog-actions class="pe-4" align="end">
+        <button mat-stroked-button mat-dialog-close class="">Close</button>
+    </div>
+</section>

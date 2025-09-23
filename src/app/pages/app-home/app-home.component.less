@@ -1,0 +1,19 @@
+@import '..//../core/theme-essentials/less_variables.less';
+:host {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    height: 100%;
+}
+.content {
+    flex-grow: 1;
+}
+
+.main-content {
+    height: @content-height;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}

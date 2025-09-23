@@ -1,0 +1,227 @@
+@import '../../../core/theme-essentials/less_variables.less';
+
+::ng-deep.mat-mdc-option.mdc-list-item {
+    font-size: 14px;
+    min-height: 35px;
+    padding: 0 12px;
+}
+
+.telecom-reports {
+
+    .filter-sec {
+
+        ::ng-deep.mat-mdc-text-field-wrapper {
+            height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        ::ng-deep.mat-mdc-form-field-infix {
+            font-size: 14px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field .mdc-notched-outline__notch {
+            display: flex !important;
+        }
+
+    }
+
+    .table-responsive {
+        border: 1px solid #c5c5c5;
+        border-radius: 7px;
+
+        .mat-mdc-header-row {
+            height: 43px;
+            background: #eff5f5;
+            color: #04424fd6;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 550;
+        }
+
+        .mat-mdc-cell {
+            border-bottom-color: #dadada
+        }
+
+        .mat-mdc-row,
+        .mdc-data-table__content {
+            border-bottom: 1px solid #dadada;
+            height: 47px;
+        }
+
+        ::ng-deep.mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+            cursor: pointer;
+            height: 30px;
+            width: 70px;
+            display: flex;
+            padding: 0px 11px;
+            align-items: center;
+        }
+
+        ::ng-deep.mat-mdc-paginator-range-label {
+            margin: 0 15px 0 4px;
+            font-size: 14px;
+        }
+
+        ::ng-deep.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input {
+            font-size: 15px;
+            display: flex;
+        }
+
+        ::ng-deep.mat-mdc-paginator-page-size-label {
+            margin: 0 4px;
+            color: #828282;
+            font-size: 14px;
+        }
+
+        ::ng-deep.mat-mdc-select {
+            display: flex;
+            width: 100%;
+            font-size: 14px;
+            outline: none;
+        }
+
+        ::ng-deep.mat-mdc-icon-button {
+            border: 1px solid #e0e0e0;
+            display: flex;
+            padding: 0px;
+            align-items: center;
+            justify-content: center;
+            height: 31px;
+            width: 33px;
+            border-radius: 5px;
+            margin: 2px;
+        }
+
+        tr.example-detail-row {
+            height: 0;
+        }
+
+        .example-element-row td {
+            border-bottom-width: 0;
+        }
+
+        .example-element-detail {
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        table {
+
+            .kv-container {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding: 10px;
+                background: #f9f9f9;
+                border-left: 4px solid #0A606F;
+            }
+
+            .kv-row {
+                line-height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .kv-key {
+                font-weight: 600;
+                color: #555;
+            }
+
+            .kv-value {
+                text-align: right;
+                color: #333;
+            }
+
+            .custom-chip-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .custom-chip {
+                background-color: @app-secondary-color-2;
+                color: @app-menu-active-color;
+                padding: 2px 9px;
+                border-radius: 16px;
+                font-size: 12px;
+                font-weight: 500;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: @app-secondary-color-3; // darker hover effect
+                    transform: scale(1.05);
+                    cursor: default;
+                    cursor: pointer;
+
+
+                }
+            }
+
+            .actions-btns {
+                .mat-mdc-icon-button {
+                    height: 27px;
+                    width: 27px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+                    &:hover {
+                        transform: scale(1.1);
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                    }
+                }
+
+                .edit-btn {
+                    .mat-mdc-icon-button:hover {
+                        background-color: @app-secondary-color-2;
+                        color: @app-menu-active-color;
+                    }
+                }
+
+                .expand-btn {
+                    .mat-mdc-icon-button:hover {
+                        background-color: @app-accent-color;
+                        color: @app-menu-active-color;
+                    }
+                }
+
+                .delete-btn {
+                    .mat-mdc-icon-button:hover {
+                        background-color: red;
+                        color: @app-menu-active-color;
+                    }
+                }
+
+                .mat-icon {
+                    width: 19px;
+                    height: 19px;
+                    font-size: 19px;
+                    transition: transform 0.3s ease-in-out;
+                }
+
+                // Optional: add a rotation effect on icon hover
+                .edit-btn:hover .mat-icon,
+                .delete-btn:hover .mat-icon {
+                    transform: rotate(10deg);
+                }
+            }
+
+            .no-data {
+                background-color: #fefbf2;
+                font-size: 15px;
+                color: #bb9600;
+
+                span {
+                    font-weight: 500;
+                }
+            }
+
+        }
+    }
+}

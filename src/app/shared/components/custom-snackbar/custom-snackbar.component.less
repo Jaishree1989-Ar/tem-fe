@@ -1,0 +1,65 @@
+.snackbar-container {
+    display: flex;
+    align-items: center;
+    padding: 4px 9px;
+    border-radius: 12px;
+    color: #333;
+    width: 100%;
+    max-width: 403px;
+    gap: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 2px 1px 21px 5px;
+
+    .icon {
+        font-size: 24px;
+        display: flex;
+    }
+
+    .mat-mdc-icon-button.mat-mdc-button-base {
+        padding: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .message {
+        flex: 1;
+
+        strong {
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 0.875rem;
+            margin: 0;
+        }
+    }
+
+    // button {
+    //   align-self: flex-start;
+    // }
+
+    &.neutral {
+        background-color: #f5f5f5;
+        color: #444;
+    }
+
+    &.info {
+        background-color: #e3f2fd;
+        color: #1e88e5;
+    }
+
+    &.success {
+        background-color: #e6f4ea;
+        color: #2e7d32;
+    }
+
+    &.warning {
+        background-color: #fff3e0;
+        color: #f57c00;
+    }
+
+    &.error {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+}

@@ -1,0 +1,82 @@
+[
+    {
+        "menuName": "Dashboard",
+        "icon": "dashboard",
+        "parent": false,
+        "routerLink": "dashboard",
+        "canShow": false,
+        "accessType": ""
+    },
+    {
+        "menuName": "Invoices",
+        "icon": "receipt_long",
+        "parent": false,
+        "routerLink": "invoices",
+        "canShow": false,
+        "accessType": ""
+    },
+    {
+        "menuName": "Inventory",
+        "icon": "inventory_2",
+        "parent": false,
+        "routerLink": "inventory",
+        "canShow": false,
+        "accessType": ""
+    },
+    {
+        "menuName": "Reports",
+        "icon": "bar_chart",
+        "parent": true,
+        "menu": [
+            {
+                "text": "Telecom Reports",
+                "icon": "power_input",
+                "routerLink": "telecom-reports",
+                "canShow": false,
+                "accessType": ""
+            },
+            {
+                "text": "Wireless Reports",
+                "icon": "router",
+                "routerLink": "wireless-reports",
+                "canShow": false,
+                "accessType": ""
+            }
+        ]
+    },
+    {
+        "menuName": "Management",
+        "icon": "domain",
+        "parent": true,
+        "menu": [
+            {
+                "text": "User",
+                "icon": "people",
+                "routerLink": "user",
+                "canShow": false,
+                "accessType": ""
+            },
+            {
+                "text": "Role",
+                "icon": "lan",
+                "routerLink": "role",
+                "canShow": false,
+                "accessType": ""
+            },
+            {
+                "text": "Manage Dept",
+                "icon": "apartment",
+                "routerLink": "department",
+                "canShow": false,
+                "accessType": ""
+            },
+            {
+                "text": "Manage Data",
+                "icon": "cloud_upload",
+                "routerLink": "invoice-upload",
+                "canShow": false,
+                "accessType": ""
+            }
+        ]
+    }
+]

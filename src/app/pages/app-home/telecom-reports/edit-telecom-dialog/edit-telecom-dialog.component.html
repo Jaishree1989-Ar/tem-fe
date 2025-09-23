@@ -1,0 +1,38 @@
+<section class="form-dialog" [formGroup]="teleReportForm">
+    <h1 mat-dialog-title> Update </h1>
+
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Department</mat-label>
+                    <input type="text" matInput formControlName="department" placeholder="Enter department">
+                    <!-- <mat-hint>Errors appear instantly!</mat-hint> -->
+                    <!-- @if (teleReportForm.get('department')?.hasError('required')) {
+                        <mat-error>Department is <strong>required</strong></mat-error>
+                    } -->
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Viscode</mat-label>
+                    <input type="text" matInput formControlName="viscode" placeholder="Enter viscode">
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Name On Invoice</mat-label>
+                    <input type="text" matInput formControlName="nameOnInvoice" placeholder="Enter name on invoice">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close class="">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onSubmit()"
+            [disabled]="!teleReportForm.valid ">
+            Update
+        </button>
+    </div>
+</section>

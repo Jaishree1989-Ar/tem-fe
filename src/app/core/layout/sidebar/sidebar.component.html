@@ -1,0 +1,157 @@
+<section class="sidebarBodyContainer thin-scroll h-100">
+
+    <div class="h-100">
+
+        <div class="sidebarHeader">
+            <div class="logo w-100" (click)="this.sidebarService.toggleSidenav()"
+                [ngStyle]="!sidebarService.isExpanded?{'justify-content': 'center'} : {}">
+                <span *ngIf="sidebarService.isExpanded && sidebarService.isExpanded !== undefined"
+                    class="h-100 d-flex justify-content-center align-items-center ">
+                    <img src="../../../../assets/logo/logo-sticky.png" alt="logo" class="logo-big" />
+                    <!-- <span class="headerName">Expenses</span> -->
+                </span>
+                <span *ngIf="!sidebarService.isExpanded && sidebarService.isExpanded !== undefined"
+                    class="h-100 d-flex justify-content-center align-items-center ">
+                    <img src="../../../../assets/logo/logo-sticky (1).png" alt="logo" class="logo-small" />
+                </span>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column justify-content-between mainDiv">
+            <div>
+                <!-- Menu List -->
+                <mat-nav-list class="sidebarList mb-5">
+                    <ng-container *ngFor="let menuGroup of menuList; index as i;">
+
+                        <mat-expansion-panel [class.mat-elevation-z0]="true" class="my-1"
+                            [expanded]="i === chosenParentIndex" *ngIf="menuGroup.parent else menuWithoutExpansion"
+                            [hideToggle]="!sidebarService.isExpanded">
+                            <mat-expansion-panel-header class="menu-title" [matTooltip]="menuGroup.menuName"
+                                matTooltipPosition="right" [matTooltipDisabled]="sidebarService.isExpanded"
+                                [ngClass]="{ 'menu-collapse': !sidebarService.isExpanded, 'active-parent': chosenParentMenu === menuGroup.menuName}">
+                                <span class="d-flex align-items-center">
+                                    <mat-icon mat-list-icon class="sidenave-icon">{{ menuGroup.icon }}</mat-icon>
+                                    <h3 class="m-0" *ngIf="sidebarService.isExpanded">{{ menuGroup.menuName }}</h3>
+                                </span>
+                            </mat-expansion-panel-header>
+                            <ng-container *ngFor="let menu of menuGroup.menu; index as j;">
+                                <ng-container [ngTemplateOutlet]="menu.children ? childMenu : parentMenu"
+                                    [ngTemplateOutletContext]="{ menu: menu, parentIndex: i }">
+                                </ng-container>
+                            </ng-container>
+                        </mat-expansion-panel>
+
+                        <ng-template #menuWithoutExpansion>
+                            <div class="soloMenu" *ngIf="menuGroup.canShow">
+                                <a [routerLink]="menuGroup.routerLink" routerLinkActive="active" class="menu-title"
+                                    [matTooltip]="menuGroup.menuName" matTooltipPosition="right"
+                                    [matTooltipDisabled]="sidebarService.isExpanded">
+
+                                    <div class="iconStyle"
+                                        [ngClass]="{ 'justify-content-center !important': !sidebarService.isExpanded }">
+                                        <div>
+                                            <mat-icon>{{ menuGroup.icon }}</mat-icon>
+                                        </div>
+                                        <div *ngIf="sidebarService.isExpanded">
+                                            <h3 class="mb-0">
+                                                {{ menuGroup.menuName }}
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                </a>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                </mat-nav-list>
+
+                <!-- Parent Menu Template -->
+                <ng-template #parentMenu let-menu="menu" let-parentIndex="parentIndex">
+                    <app-sidenav-link class="d-flex align-items-center" [routerLink]="menu.routerLink"
+                        *ngIf="menu.canShow" routerLinkActive="active" [matTooltip]="menu.text"
+                        matTooltipPosition="right" [matTooltipDisabled]="sidebarService.isExpanded"
+                        (click)="subMenuClick(parentIndex)">
+                        <div class="iconStyle cursor-pointer"
+                            [ngClass]="{ 'justify-content-center !important': !sidebarService.isExpanded }">
+                            <div>
+                                <mat-icon>{{ menu.icon }}</mat-icon>
+                            </div>
+                            <div *ngIf="sidebarService.isExpanded">
+                                <h3 class="mb-0">
+                                    {{ menu.text }}
+                                </h3>
+                            </div>
+
+                        </div>
+                    </app-sidenav-link>
+                </ng-template>
+
+
+                <!-- Child Menu Template -->
+                <ng-template #childMenu let-menu="menu">
+                    <mat-expansion-panel [class.mat-elevation-z0]="true" class="my-1">
+                        <mat-expansion-panel-header [matTooltip]="menu.text" matTooltipPosition="right"
+                            [matTooltipDisabled]="sidebarService.isExpanded">
+                            <mat-icon mat-list-icon class="sidenave-icon me-2">{{ menu.icon }}</mat-icon>
+                            <span *ngIf="sidebarService.isExpanded" class="menu-name">{{ menu.text }}</span>
+                        </mat-expansion-panel-header>
+                        <mat-nav-list [ngClass]="{'mat-expansion-style' : !sidebarService.isExpanded}">
+                            <mat-list-item *ngFor="let submenu of menu.children" [routerLink]="submenu.routerLink"
+                                routerLinkActive="active-submenu" [routerLinkActiveOptions]="{ exact: true }"
+                                [matTooltip]="submenu.text" matTooltipPosition="right"
+                                [matTooltipDisabled]="sidebarService.isExpanded">
+                                <mat-icon class="sidenave-icon me-2">{{ submenu.icon }}</mat-icon>
+                                <span *ngIf="sidebarService.isExpanded" class="menu-name">{{ submenu.text }}</span>
+                            </mat-list-item>
+                        </mat-nav-list>
+                    </mat-expansion-panel>
+                </ng-template>
+            </div>
+            <div>
+                <div class="d-flex justify-content-center align-items-center userContent">
+                    <!--[matMenuTriggerFor]="menu"-->
+                    <!-- <div class="initialDetails fmedium d-flex justify-content-center align-items-center">
+                        {{ userDetails?.userName | firstLetter}}
+                    </div>
+                    <div *ngIf="sidebarService.isExpanded" class="fmedium nameDetails">
+                        <p class="m-0 nameText">{{this.userDetails?.userName}}</p>
+                        <p [matTooltip]="this.userDetails?.email" matTooltipShowDelay="750" matTooltipPosition="right"
+                            class="m-0 mailText">{{this.userDetails?.email}}</p>
+                    </div> -->
+                    <!-- <div class="settingsMenu menu-title d-flex align-items-center text-decoration-none"
+                        matTooltip="Settings" matTooltipPosition="right"
+                        [matTooltipDisabled]="sidebarService.isExpanded"
+                        [ngClass]="{ 'justify-content-center !important': !sidebarService.isExpanded }"
+                        [matMenuTriggerFor]="menu">
+                        <div class="iconStyle d-flex justify-content-center align-items-center">
+                            <mat-icon>settings</mat-icon>
+                        </div>
+                        <h3 class="mb-0" *ngIf="sidebarService.isExpanded">
+                            Settings
+                        </h3>
+                    </div>-->
+                    <!-- <mat-menu #menu="matMenu" xPosition="after" class="matMenuStyle">
+                        <button mat-menu-item>
+                            <mat-icon>lock_reset</mat-icon>
+                            <span>Change Password</span>
+                        </button>
+                        <button mat-menu-item (click)="logout()">
+                            <mat-icon>exit_to_app</mat-icon>
+                            <span>Logout</span>
+                        </button>
+                    </mat-menu> -->
+                </div>
+                <div class="nav-bottom" (click)="this.sidebarService.toggleSidenav()">
+                    <span class="iconDiv" [class.is-flipped]="sidebarService.isExpanded"
+                        [matTooltip]="sidebarService.isExpanded ? 'Collapse' : 'Expand'" matTooltipPosition="after"
+                        [matTooltipDisabled]="sidebarService.isExpanded ? true : false">
+                        <mat-icon>chevron_right</mat-icon>
+                    </span>
+                    <h3 class="mb-0" *ngIf="sidebarService.isExpanded">
+                        Collapse
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

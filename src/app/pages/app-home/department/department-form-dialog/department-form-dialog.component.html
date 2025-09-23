@@ -1,0 +1,58 @@
+<section class="form-dialog" [formGroup]="departmentForm">
+    <h1 mat-dialog-title>{{ isEditMode ? 'Update Department' : 'Create Department' }}</h1>
+
+    <div mat-dialog-content>
+        <div class="row">
+            <mat-form-field appearance="outline" class="col-md-6">
+                <mat-label>Foundation Account Number</mat-label>
+                <input matInput formControlName="foundationAccountNumber" placeholder="Enter foundation account number"
+                    required>
+                <mat-error *ngIf="departmentForm.get('foundationAccountNumber')?.hasError('required')">
+                    Foundation Account Number is required.
+                </mat-error>
+                <mat-error *ngIf="departmentForm.get('foundationAccountNumber')?.hasError('pattern')">
+                    Please enter only numbers.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-6">
+                <mat-label>Department Account Number</mat-label>
+                <input matInput formControlName="departmentAccountNumber" placeholder="Enter department account number"
+                    required>
+                <mat-error *ngIf="departmentForm.get('departmentAccountNumber')?.hasError('required')">
+                    Department Account Number is required.
+                </mat-error>
+                <mat-error *ngIf="departmentForm.get('departmentAccountNumber')?.hasError('pattern')">
+                    Please enter only numbers.
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline" class="col-md-6">
+                <mat-label>Department</mat-label>
+                <input matInput formControlName="department" placeholder="Enter department" required>
+                <mat-error *ngIf="departmentForm.get('department')?.hasError('required')">
+                    Department is required.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-6">
+                <mat-label>Carrier</mat-label>
+                <mat-select formControlName="carrier" required>
+                    <mat-option *ngFor="let car of distinctCars" [value]="car">
+                        {{ car }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="departmentForm.get('carrier')?.hasError('required')">Carrier is required.</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!departmentForm.valid">
+            {{ isEditMode ? 'Update' : 'Submit' }}
+        </button>
+    </div>
+</section>

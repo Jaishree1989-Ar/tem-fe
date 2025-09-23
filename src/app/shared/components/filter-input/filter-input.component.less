@@ -1,0 +1,43 @@
+.filter-input-container {
+    ::ng-deep .mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper {
+        height: 38px;
+        padding: 0px;
+        display: flex;
+        padding-left: 0;
+        align-items: center;
+    }
+
+
+    ::ng-deep.mat-mdc-form-field-icon-prefix>.mat-icon,
+    .mat-mdc-form-field-icon-suffix>.mat-icon {
+        box-sizing: content-box;
+        padding: 0px 0px 0px 10px;
+        width: 22px;
+        height: 21px;
+        font-size: 21px;
+        width: 19px;
+    }
+
+    ::ng-deep.mat-mdc-icon-button .mdc-button__label,
+    .mat-mdc-icon-button .mat-icon {
+        z-index: 1;
+        position: relative;
+        width: 22px;
+        height: 22px;
+        font-size: 22px;
+    }
+
+    .filter-field {
+        width: 100%;
+        max-width: 240px;
+
+        mat-icon {
+            color: rgba(0, 0, 0, 0.54); // adjust based on your theme
+        }
+
+        input {
+            padding-left: 4px;
+        }
+    }
+
+}

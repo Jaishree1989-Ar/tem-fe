@@ -1,0 +1,593 @@
+<section class="invoice-data-upload-section">
+    <div class="header row align-items-center">
+        <div class="col">
+            <header class="headerText">Upload Section</header>
+        </div>
+        <div class="col">
+            <!-- <add-button label="Upload" color="accent" icon="add_circle" class="float-end"></add-button> -->
+        </div>
+    </div>
+    <div class="p-3">
+        <mat-tab-group [(selectedIndex)]="selectedMainTabIndex" (selectedTabChange)="onMainTabChange($event)"
+            mat-stretch-tabs="false" mat-align-tabs="start" class="invoice-tabs">
+            <mat-tab class="upload-invoice-tab" label="Upload Invoice">
+                <ng-template matTabContent>
+                    <div class="content-outer my-2 d-flex justify-content-center align-items-center"
+                        [class.file-hover]="isFileHovered" (dragover)="onDragOver($event)"
+                        (dragleave)="onDragLeave($event)" (drop)="onFileDrop($event)">
+                        <div class="input-field">
+                            <input type="file" class="file-input" accept=".xlsx,.csv" (change)="onFileSelected($event)"
+                                #fileUpload hidden />
+                        </div>
+                        <div class="file-upload d-flex gap-1 align-items-center flex-column">
+                            <img src="../../../../assets/invoice/upload.gif" alt="data" height="50" width="50"
+                                (click)="fileUpload.click()">
+                            <div class="drop-info">
+                                <span class="hint-text" (click)="fileUpload.click()">Click here to upload</span> or drag
+                                & drop
+                                here
+                            </div>
+                            <div class="file-types">
+                                XLSX or CSV
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (this.selectedFile) {
+                    <div class="uploaded-files mb-2">
+                        <div class="files">
+                            <div class="file d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-3">
+                                    <div>
+                                        <ng-container [ngSwitch]="checkFileType()">
+                                            <img *ngSwitchCase="'csv'" src="../../../../assets/invoice/csv3.png"
+                                                alt="CSV" height="40" width="40" />
+                                            <img *ngSwitchCase="'xlsx'" src="../../../../assets/invoice/xlsx3.png"
+                                                alt="Excel" height="40" width="40" />
+                                            <img *ngSwitchDefault src="../../../../assets/invoice/unknown.png"
+                                                alt="File" height="40" width="40" />
+                                        </ng-container>
+                                    </div>
+                                    <div class="file-name">
+                                        <p class="m-0">{{ fileName }}</p>
+                                        <p class="m-0 size">{{ fileSize || '12 MB' }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="file-delete d-flex gap-2">
+                                    <button mat-mini-fab color="primary" (click)="uploadFile()" matTooltip="Upload">
+                                        <mat-icon>upload</mat-icon>
+                                    </button>
+                                    <button mat-mini-fab color="warn" (click)="removeSelectedFile()"
+                                        matTooltip="Delete">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    <!-- Tab Section -->
+                    <div class="uploaded-list px-3 py-2">
+                        <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabChange($event)"
+                            class="invoice-tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+
+                            <!-- Tab 1: Uploaded Invoices -->
+                            <mat-tab label="Uploaded Invoices">
+                                <div class="table-head d-flex justify-content-end align-items-center">
+                                    <app-filter-input placeholder="Search Reports" [(value)]="filterValue" #input
+                                        (valueChanged)="applyFilter($event)"></app-filter-input>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="mat-elevation-z1" mat-table recycleRows [dataSource]="dataSource">
+
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef> File Name </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div>
+                                                        <ng-container [ngSwitch]="true">
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('csv')"
+                                                                src="../../../../assets/invoice/csv3.png" alt="CSV"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('spreadsheetml')"
+                                                                src="../../../../assets/invoice/xlsx3.png" alt="Excel"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchDefault
+                                                                src="../../../../assets/invoice/unknown.png" alt="File"
+                                                                height="30" width="30" />
+                                                        </ng-container>
+                                                    </div>
+                                                    <div class="file-name">
+                                                        <p class="m-0">{{element.name}}</p>
+                                                        <p class="m-0 size">{{formatFileSize(element.fileSize)}}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="carrier">
+                                            <th mat-header-cell *matHeaderCellDef> Carrier </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.carrier}}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="size">
+                                            <th mat-header-cell *matHeaderCellDef> File Size </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.fileSize}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="fileType">
+                                            <th mat-header-cell *matHeaderCellDef> File Type </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.fileType}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedOn">
+                                            <th mat-header-cell *matHeaderCellDef> Date Uploaded </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.dateUploaded | date:'MMM dd, yyyy, HH:mm'}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedBy">
+                                            <th mat-header-cell *matHeaderCellDef> Uploaded By </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.uploadedBy}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                            <td mat-cell *matCellDef="let row">
+                                                <div class="d-flex actions-btns">
+                                                    <!-- <div class="edit-btn" matTooltip="Edit">
+                                            <button mat-icon-button color="primary">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </div> -->
+                                                    <div class="delete-btn" matTooltip="Delete">
+                                                        <button mat-icon-button color="warn"
+                                                            (click)="deleteInvoice(row)">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        <tr class="mat-row no-data" *matNoDataRow>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.dataSource.data.length!= 0"
+                                                [attr.colspan]="displayedColumns.length">
+                                                No data matching
+                                                the search criteria.
+                                                <span> "{{input.value}}"</span>.
+                                            </td>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.dataSource.data.length=== 0"
+                                                [attr.colspan]="displayedColumns.length">
+                                                No data available in table.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <mat-paginator #paginator1
+                                        [hidden]="dataSource.data.length === 0 || dataSource.filteredData.length === 0"
+                                        [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+                                    </mat-paginator>
+                                </div>
+                            </mat-tab>
+
+                            <!-- Tab 2: Approvals -->
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <span matBadge="{{pendingApprovalsCount}}" matBadgeOverlap="false"
+                                        matBadgeColor="warn"
+                                        [matBadgeHidden]="pendingApprovalsCount === 0">Approvals</span>
+                                </ng-template>
+                                <div class="table-head d-flex justify-content-end align-items-center">
+                                    <app-filter-input placeholder="Search Approvals" [(value)]="approvalsFilterValue"
+                                        #approvalsInput
+                                        (valueChanged)="applyApprovalsFilter($event)"></app-filter-input>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="mat-elevation-z1" mat-table recycleRows
+                                        [dataSource]="approvalsDataSource">
+
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef> File Name </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div>
+                                                        <ng-container [ngSwitch]="true">
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('csv')"
+                                                                src="../../../../assets/invoice/csv3.png" alt="CSV"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('spreadsheetml')"
+                                                                src="../../../../assets/invoice/xlsx3.png" alt="Excel"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchDefault
+                                                                src="../../../../assets/invoice/unknown.png" alt="File"
+                                                                height="30" width="30" />
+                                                        </ng-container>
+                                                    </div>
+                                                    <div class="file-name">
+                                                        <p class="m-0">{{element.name}}</p>
+                                                        <p class="m-0 size">{{formatFileSize(element.fileSize)}}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="carrier">
+                                            <th mat-header-cell *matHeaderCellDef> Carrier </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.carrier}}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedOn">
+                                            <th mat-header-cell *matHeaderCellDef> Date Uploaded </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.dateUploaded | date:'MMM dd, yyyy, HH:mm'}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedBy">
+                                            <th mat-header-cell *matHeaderCellDef> Uploaded By </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.uploadedBy}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="reviewedBy">
+                                            <th mat-header-cell *matHeaderCellDef> Reviewed By </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.reviewedBy || '-'}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="view">
+                                            <th mat-header-cell *matHeaderCellDef> View </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <button mat-icon-button color="primary" (click)="viewInvoice(element)"
+                                                    matTooltip="View">
+                                                    <mat-icon>visibility</mat-icon>
+                                                </button>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="status">
+                                            <th mat-header-cell *matHeaderCellDef> Status </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <span [ngClass]="getStatusClass(element.status)" class="status-badge">
+                                                    {{ element.status }}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                            <td mat-cell *matCellDef="let row">
+                                                <button mat-icon-button color="primary" (click)="viewInvoice(row)"
+                                                    matTooltip="View">
+                                                    <mat-icon>visibility</mat-icon>
+                                                </button>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="approvalsDisplayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: approvalsDisplayedColumns;"></tr>
+                                        <tr class="mat-row no-data" *matNoDataRow>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.approvalsDataSource.data.length!= 0"
+                                                [attr.colspan]="approvalsDisplayedColumns.length">
+                                                No data matching
+                                                the search criteria.
+                                                <span> "{{approvalsInput.value}}"</span>.
+                                            </td>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.approvalsDataSource.data.length=== 0"
+                                                [attr.colspan]="approvalsDisplayedColumns.length">
+                                                No approvals available.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <mat-paginator #paginator2
+                                        [hidden]="approvalsDataSource.data.length === 0 || approvalsDataSource.filteredData.length === 0"
+                                        [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+                                    </mat-paginator>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </ng-template>
+            </mat-tab>
+
+            <mat-tab label="Upload Inventory">
+                <ng-template matTabContent>
+                    <div class="content-outer my-2 d-flex justify-content-center align-items-center"
+                        [class.file-hover]="isFileHovered" (dragover)="onDragOver($event)"
+                        (dragleave)="onDragLeave($event)" (drop)="onFileDrop($event)">
+                        <div class="input-field">
+                            <input type="file" class="file-input" accept=".xlsx,.csv" (change)="onFileSelected($event)"
+                                #fileUpload hidden />
+                        </div>
+                        <div class="file-upload d-flex gap-1 align-items-center flex-column">
+                            <img src="../../../../assets/invoice/upload.gif" alt="data" height="50" width="50"
+                                (click)="fileUpload.click()">
+                            <div class="drop-info">
+                                <span class="hint-text" (click)="fileUpload.click()">Click here to upload</span> or drag
+                                & drop
+                                here
+                            </div>
+                            <div class="file-types">
+                                XLSX or CSV
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (this.selectedFile) {
+                    <div class="uploaded-files mb-2">
+                        <div class="files">
+                            <div class="file d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-3">
+                                    <div>
+                                        <ng-container [ngSwitch]="checkFileType()">
+                                            <img *ngSwitchCase="'csv'" src="../../../../assets/invoice/csv3.png"
+                                                alt="CSV" height="40" width="40" />
+                                            <img *ngSwitchCase="'xlsx'" src="../../../../assets/invoice/xlsx3.png"
+                                                alt="Excel" height="40" width="40" />
+                                            <img *ngSwitchDefault src="../../../../assets/invoice/unknown.png"
+                                                alt="File" height="40" width="40" />
+                                        </ng-container>
+                                    </div>
+                                    <div class="file-name">
+                                        <p class="m-0">{{ fileName }}</p>
+                                        <p class="m-0 size">{{ fileSize || '12 MB' }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="file-delete d-flex gap-2">
+                                    <button mat-mini-fab color="primary" (click)="uploadFile()" matTooltip="Upload">
+                                        <mat-icon>upload</mat-icon>
+                                    </button>
+                                    <button mat-mini-fab color="warn" (click)="removeSelectedFile()"
+                                        matTooltip="Delete">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    <!-- Tab Section -->
+                    <div class="uploaded-list px-3 py-2">
+                        <mat-tab-group [(selectedIndex)]="selectedInventoryTabIndex" (selectedTabChange)="onInventoryTabChange($event)"
+                            class="invoice-tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+
+                            <!-- Tab 1: Uploaded Inventory -->
+                            <mat-tab label="Uploaded Inventory">
+                                <div class="table-head d-flex justify-content-end align-items-center">
+                                    <app-filter-input placeholder="Search Reports" [(value)]="filterInventoryValue"
+                                        #inventoryInput (valueChanged)="applyInventoryFilter($event)"></app-filter-input>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="mat-elevation-z1" mat-table recycleRows
+                                        [dataSource]="inventoryDataSource">
+
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef> File Name </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div>
+                                                        <ng-container [ngSwitch]="true">
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('csv')"
+                                                                src="../../../../assets/invoice/csv3.png" alt="CSV"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('spreadsheetml')"
+                                                                src="../../../../assets/invoice/xlsx3.png" alt="Excel"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchDefault
+                                                                src="../../../../assets/invoice/unknown.png" alt="File"
+                                                                height="30" width="30" />
+                                                        </ng-container>
+                                                    </div>
+                                                    <div class="file-name">
+                                                        <p class="m-0">{{element.name}}</p>
+                                                        <p class="m-0 size">{{formatFileSize(element.fileSize)}}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="carrier">
+                                            <th mat-header-cell *matHeaderCellDef> Carrier </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.carrier}}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="size">
+                                            <th mat-header-cell *matHeaderCellDef> File Size </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.fileSize}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="fileType">
+                                            <th mat-header-cell *matHeaderCellDef> File Type </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.fileType}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedOn">
+                                            <th mat-header-cell *matHeaderCellDef> Date Uploaded </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.dateUploaded | date:'MMM dd, yyyy, HH:mm'}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedBy">
+                                            <th mat-header-cell *matHeaderCellDef> Uploaded By </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.uploadedBy}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                            <td mat-cell *matCellDef="let row">
+                                                <div class="d-flex actions-btns">
+                                                    <!-- <div class="edit-btn" matTooltip="Edit">
+                                            <button mat-icon-button color="primary">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </div> -->
+                                                    <div class="delete-btn" matTooltip="Delete">
+                                                        <button mat-icon-button color="warn"
+                                                            (click)="deleteInvoice(row)">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="inventoryDisplayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: inventoryDisplayedColumns;"></tr>
+                                        <tr class="mat-row no-data" *matNoDataRow>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.inventoryDataSource.data.length!= 0"
+                                                [attr.colspan]="inventoryDisplayedColumns.length">
+                                                No data matching
+                                                the search criteria.
+                                                <span> "{{inventoryInput.value}}"</span>.
+                                            </td>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.inventoryDataSource.data.length=== 0"
+                                                [attr.colspan]="inventoryDisplayedColumns.length">
+                                                No data available in table.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <mat-paginator #paginator3
+                                        [hidden]="inventoryDataSource.data.length === 0 || inventoryDataSource.filteredData.length === 0"
+                                        [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+                                    </mat-paginator>
+                                </div>
+                            </mat-tab>
+
+                            <!-- Tab 2: Approvals -->
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <span matBadge="{{pendingInventoryApprovalsCount}}" matBadgeOverlap="false"
+                                        matBadgeColor="warn"
+                                        [matBadgeHidden]="pendingInventoryApprovalsCount === 0">Approvals</span>
+                                </ng-template>
+                                <div class="table-head d-flex justify-content-end align-items-center">
+                                    <app-filter-input placeholder="Search Approvals" [(value)]="approvalsInventoryFilterValue"
+                                        #approvalsInput
+                                        (valueChanged)="applyInventoryApprovalsFilter($event)"></app-filter-input>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="mat-elevation-z1" mat-table recycleRows
+                                        [dataSource]="approvalsInventoryDataSource">
+
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef> File Name </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div>
+                                                        <ng-container [ngSwitch]="true">
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('csv')"
+                                                                src="../../../../assets/invoice/csv3.png" alt="CSV"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchCase="element.fileType?.toLowerCase().includes('spreadsheetml')"
+                                                                src="../../../../assets/invoice/xlsx3.png" alt="Excel"
+                                                                height="30" width="30" />
+                                                            <img *ngSwitchDefault
+                                                                src="../../../../assets/invoice/unknown.png" alt="File"
+                                                                height="30" width="30" />
+                                                        </ng-container>
+                                                    </div>
+                                                    <div class="file-name">
+                                                        <p class="m-0">{{element.name}}</p>
+                                                        <p class="m-0 size">{{formatFileSize(element.fileSize)}}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="carrier">
+                                            <th mat-header-cell *matHeaderCellDef> Carrier </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.carrier}}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedOn">
+                                            <th mat-header-cell *matHeaderCellDef> Date Uploaded </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.dateUploaded | date:'MMM
+                                                dd, yyyy,
+                                                HH:mm'}}
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="uploadedBy">
+                                            <th mat-header-cell *matHeaderCellDef> Uploaded By </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.uploadedBy}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="reviewedBy">
+                                            <th mat-header-cell *matHeaderCellDef> Reviewed By </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.reviewedBy || '-'}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="view">
+                                            <th mat-header-cell *matHeaderCellDef> View </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <button mat-icon-button color="primary" (click)="viewInventory(element)"
+                                                    matTooltip="View">
+                                                    <mat-icon>visibility</mat-icon>
+                                                </button>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="status">
+                                            <th mat-header-cell *matHeaderCellDef> Status </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <span [ngClass]="getStatusClass(element.status)" class="status-badge">
+                                                    {{ element.status }}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                            <td mat-cell *matCellDef="let row">
+                                                <button mat-icon-button color="primary" (click)="viewInventory(row)"
+                                                    matTooltip="View">
+                                                    <mat-icon>visibility</mat-icon>
+                                                </button>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="approvalsInventoryDisplayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: approvalsInventoryDisplayedColumns;"></tr>
+                                        <tr class="mat-row no-data" *matNoDataRow>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.approvalsInventoryDataSource.data.length!= 0"
+                                                [attr.colspan]="approvalsInventoryDisplayedColumns.length">
+                                                No data matching
+                                                the search criteria.
+                                                <span> "{{approvalsInput.value}}"</span>.
+                                            </td>
+                                            <td class="mat-cell text-center py-3"
+                                                *ngIf="this.approvalsInventoryDataSource.data.length=== 0"
+                                                [attr.colspan]="approvalsInventoryDisplayedColumns.length">
+                                                No approvals available.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <mat-paginator #paginator4
+                                        [hidden]="approvalsInventoryDataSource.data.length === 0 || approvalsInventoryDataSource.filteredData.length === 0"
+                                        [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+                                    </mat-paginator>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </ng-template>
+            </mat-tab>
+        </mat-tab-group>
+
+    </div>
+</section>

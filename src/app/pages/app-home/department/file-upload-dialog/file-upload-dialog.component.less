@@ -1,0 +1,131 @@
+@import '../../../../core/theme-essentials/less_variables.less';
+
+.dialog-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 24px;
+
+    .header-content {
+        gap: 10px;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    .close-icon-btn {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+    }
+}
+
+.mat-mdc-dialog-content {
+    padding: 20px 24px;
+}
+
+::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-title {
+    padding: 0px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 19px !important;
+    border-bottom: solid 0 #ffffff1f !important;
+    margin-bottom: 0 !important;
+    font-weight: 600 !important;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    max-height: 0 !important;
+}
+
+p {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.content-outer {
+    border: 2px dashed #93930099;
+    border-radius: 10px;
+    min-height: 200px;
+    transition: border-color 0.3s, background-color 0.3s;
+    cursor: pointer;
+    background-color: #fcfcfc;
+
+    &.file-hover {
+        border-color: @app-secondary-color-2;
+        background-color: #e6f2f4;
+    }
+
+    .file-upload {
+        text-align: center;
+
+        .drop-info {
+            font-size: 14px;
+            color: #797979;
+
+            .hint-text {
+                cursor: pointer;
+                letter-spacing: 0.5px;
+                font-weight: 500;
+                color: @app-secondary-color-2;
+                transition: color 0.2s ease-in-out;
+
+                &:hover {
+                    color: #da5000;
+                }
+            }
+        }
+
+        .file-types {
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #797979;
+            margin-top: 4px;
+        }
+    }
+}
+
+.uploaded-files {
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    .file {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+        padding: 10px 15px;
+
+        .file-name-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-name {
+            letter-spacing: 1px;
+            font-weight: 500;
+
+            .size {
+                font-size: 12px;
+                letter-spacing: 1px;
+                color: #797979;
+                font-weight: 400;
+            }
+        }
+
+        .file-delete {
+            .mat-mdc-icon-button {
+                width: 36px;
+                height: 36px;
+            }
+        }
+    }
+}
+
+.mat-mdc-dialog-actions {
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+}

@@ -1,0 +1,12 @@
+<div class="snackbar-container" [ngClass]="data.type">
+  <div class="icon">
+    <mat-icon>{{ data.icon }}</mat-icon>
+  </div>
+  <div class="message">
+    <strong>{{ data.title }}</strong>
+    <p>{{ data.message }}</p>
+  </div>
+  <button mat-icon-button (click)="data.snackBarRef.dismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
