@@ -28,8 +28,8 @@
                 <mat-list-item *ngFor="let record of dataSource.connect() | async" (click)="selectRecord(record)"
                     [class.selected]="record === selectedRecord">
                     <mat-icon matListItemIcon>person</mat-icon>
-                    <div matListItemTitle>{{record.userName || '-'}}</div>
-                    <div matListItemLine>{{record.wirelessNumber}}</div>
+                    <div matListItemTitle>{{record.userName || record.billName || '-'}}</div>
+                    <div matListItemLine>{{record.wirelessNumber || record.accountNumber}}</div>
                     <span class="list-item-amount">{{record.totalCurrentCharges}}</span>
                 </mat-list-item>
             </mat-nav-list>
@@ -39,84 +39,223 @@
             <mat-card class="detail-card" *ngIf="selectedRecord; else noSelection">
                 <mat-card-header>
                     <mat-icon mat-card-avatar>description</mat-icon>
-                    <mat-card-title>{{ selectedRecord.billingAccountName }}</mat-card-title>
+                    <mat-card-title>{{ selectedRecord.billingAccountName || selectedRecord.billName }}</mat-card-title>
                     <mat-card-subtitle>Invoice #: {{ selectedRecord.invoiceNumber }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content class="detail-grid">
-                    <div class="detail-group">
-                        <h4 class="group-title">Account & User</h4>
-                        <div class="detail-item"><mat-icon>corporate_fare</mat-icon>
-                            <div><strong>FAN:</strong> {{selectedRecord.foundationAccount || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>person</mat-icon>
-                            <div><strong>User:</strong> {{selectedRecord.userName || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>phone_iphone</mat-icon>
-                            <div><strong>Wireless #:</strong> {{selectedRecord.wirelessNumber || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>business</mat-icon>
-                            <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
-                        </div>
-                    </div>
-                    <div class="detail-group">
-                        <h4 class="group-title">Billing & Plan</h4>
-                        <div class="detail-item"><mat-icon>event</mat-icon>
-                            <div><strong>Invoice Date:</strong> {{selectedRecord.invoiceDate | date: 'longDate'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>today</mat-icon>
-                            <div><strong>Cycle End Date:</strong> {{selectedRecord.marketCycleEndDate | date:
-                                'longDate'}}
+
+                    <ng-container *ngIf="invoiceDetails.batchDetails?.carrier !== 'Verizon Wireless'">
+                        <div class="detail-group">
+                            <h4 class="group-title">Account & User</h4>
+                            <div class="detail-item"><mat-icon>corporate_fare</mat-icon>
+                                <div><strong>FAN:</strong> {{selectedRecord.foundationAccount || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>person</mat-icon>
+                                <div><strong>User:</strong> {{selectedRecord.userName || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>phone_iphone</mat-icon>
+                                <div><strong>Wireless #:</strong> {{selectedRecord.wirelessNumber || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>business</mat-icon>
+                                <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
                             </div>
                         </div>
-                        <div class="detail-item"><mat-icon>article</mat-icon>
-                            <div><strong>Rate Plan:</strong> {{selectedRecord.ratePlanName}}</div>
+                        <div class="detail-group">
+                            <h4 class="group-title">Billing & Plan</h4>
+                            <div class="detail-item"><mat-icon>event</mat-icon>
+                                <div><strong>Invoice Date:</strong> {{selectedRecord.invoiceDate | date: 'longDate'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>today</mat-icon>
+                                <div><strong>Cycle End Date:</strong> {{selectedRecord.marketCycleEndDate | date:
+                                    'longDate'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>article</mat-icon>
+                                <div><strong>Rate Plan:</strong> {{selectedRecord.ratePlanName}}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="detail-group full-width">
-                        <h4 class="group-title">Charges and Usages</h4>
-                        <div class="charges-grid">
-                            <div class="charge-item"><span>Acc
-                                    Number:</span><strong>{{selectedRecord.accountNumber}}</strong></div>
-                            <div class="charge-item"><span>Rate Code:</span><strong>{{selectedRecord.rateCode}}</strong>
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Charges and Usages</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Acc
+                                        Number:</span><strong>{{selectedRecord.accountNumber}}</strong></div>
+                                <div class="charge-item"><span>Rate
+                                        Code:</span><strong>{{selectedRecord.rateCode}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Last
+                                        Bill:</span><strong>{{selectedRecord.totalActivitySinceLastBill}}</strong></div>
+                                <div class="charge-item"><span>Fan
+                                        Level:</span><strong>{{selectedRecord.totalFanLevelCharges}}</strong></div>
+                                <div class="charge-item"><span>KB
+                                        Usage:</span><strong>{{selectedRecord.totalKbUsage}}</strong>
+                                </div>
+                                <div class="charge-item">
+                                    <span>Messages:</span><strong>{{selectedRecord.totalMessages}}</strong>
+                                </div>
+                                <div class="charge-item">
+                                    <span>Minutes:</span><strong>{{selectedRecord.totalMinutesUsage}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="invoiceDetails.batchDetails?.carrier === 'FirstNet'">
+                                    <span>MDA:</span><strong>{{selectedRecord.udl4}}</strong>
+                                </div>
+                                <div class="charge-item"
+                                    *ngIf="invoiceDetails.batchDetails?.carrier === 'AT&T Mobility'">
+                                    <span>Asset Tag:</span><strong>{{selectedRecord.assetTag}}</strong>
+                                </div>
                             </div>
-                            <div class="charge-item"><span>Last
-                                    Bill:</span><strong>{{selectedRecord.totalActivitySinceLastBill}}</strong></div>
-                            <div class="charge-item"><span>Fan
-                                    Level:</span><strong>{{selectedRecord.totalFanLevelCharges}}</strong></div>
-                            <div class="charge-item"><span>KB
-                                    Usage:</span><strong>{{selectedRecord.totalKbUsage}}</strong>
-                            </div>
-                            <div class="charge-item">
-                                <span>Messages:</span><strong>{{selectedRecord.totalMessages}}</strong>
-                            </div>
-                            <div class="charge-item">
-                                <span>Minutes:</span><strong>{{selectedRecord.totalMinutesUsage}}</strong>
-                            </div>
-                            <div class="charge-item" *ngIf="invoiceDetails.batchDetails?.carrier === 'FirstNet'">
-                                <span>MDA:</span><strong>{{selectedRecord.udl4}}</strong></div>
-                            <div class="charge-item" *ngIf="invoiceDetails.batchDetails?.carrier === 'AT&T Mobility'">
-                                <span>Asset Tag:</span><strong>{{selectedRecord.assetTag}}</strong></div>
                         </div>
-                    </div>
-                    <div class="detail-group full-width">
-                        <h4 class="group-title">Charges Breakdown</h4>
-                        <div class="charges-grid">
-                            <div class="charge-item"><span>Monthly
-                                    Charges:</span><strong>{{selectedRecord.totalMonthlyCharges}}</strong></div>
-                            <div class="charge-item"><span>Taxes:</span><strong>{{selectedRecord.totalTaxes}}</strong>
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Charges Breakdown</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Monthly
+                                        Charges:</span><strong>{{selectedRecord.totalMonthlyCharges}}</strong></div>
+                                <div class="charge-item">
+                                    <span>Taxes:</span><strong>{{selectedRecord.totalTaxes}}</strong>
+                                </div>
+                                <div class="charge-item">
+                                    <span>Surcharges:</span><strong>{{selectedRecord.totalCompanyFeesAndSurcharges}}</strong>
+                                </div>
+                                <div class="charge-item">
+                                    <span>Adjustments:</span><strong>{{selectedRecord.totalAdjustments}}</strong>
+                                </div>
+                                <div class="charge-item total"><span>Total
+                                        Charges:</span><strong>{{selectedRecord.totalCurrentCharges}}</strong></div>
+                                <div class="charge-item total"><span>Total
+                                        Reoccurring
+                                        Charges:</span><strong>${{selectedRecord.totalReoccurringCharges}}</strong>
+                                </div>
                             </div>
-                            <div class="charge-item">
-                                <span>Surcharges:</span><strong>{{selectedRecord.totalCompanyFeesAndSurcharges}}</strong>
-                            </div>
-                            <div class="charge-item">
-                                <span>Adjustments:</span><strong>{{selectedRecord.totalAdjustments}}</strong>
-                            </div>
-                            <div class="charge-item total"><span>Total
-                                    Charges:</span><strong>{{selectedRecord.totalCurrentCharges}}</strong></div>
-                            <div class="charge-item total"><span>Total
-                                    Reoccurring Charges:</span><strong>${{selectedRecord.totalReoccurringCharges}}</strong></div>
                         </div>
-                    </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="invoiceDetails.batchDetails?.carrier === 'Verizon Wireless'">
+                        <div class="detail-group">
+                            <h4 class="group-title">Account Information</h4>
+                            <div class="detail-item"><mat-icon>account_circle</mat-icon>
+                                <div><strong>Account #:</strong> {{selectedRecord.accountNumber || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>info</mat-icon>
+                                <div><strong>Account Status:</strong> {{selectedRecord.accountStatusDescription || '-'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>contact_mail</mat-icon>
+                                <div><strong>Bill Name:</strong> {{selectedRecord.billName || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>person_pin</mat-icon>
+                                <div><strong>Contact:</strong> {{selectedRecord.billContactName}}
+                                    ({{selectedRecord.billContactNumber}})</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>business</mat-icon>
+                                <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
+                            </div>
+                        </div>
+                        <div class="detail-group">
+                            <h4 class="group-title">Billing Details</h4>
+                            <div class="detail-item"><mat-icon>event_note</mat-icon>
+                                <div><strong>Bill Period:</strong> {{selectedRecord.billPeriod || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>event_available</mat-icon>
+                                <div><strong>Due Date:</strong> {{selectedRecord.dateDue | date: 'longDate'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>credit_card</mat-icon>
+                                <div><strong>Payment Method:</strong> {{selectedRecord.recurringPaymentMethod || '-'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>location_on</mat-icon>
+                                <div><strong>Address:</strong> {{selectedRecord.billCity}}, {{selectedRecord.billState}}
+                                    {{selectedRecord.billZip}}</div>
+                            </div>
+                        </div>
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Other Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Account Creation
+                                        Date:</span><strong>{{selectedRecord.billAccountCreateDate}}</strong></div>
+                                <div class="charge-item"><span>Bill Address Level
+                                        2:</span><strong>{{selectedRecord.billAddressLevel2}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Bill Address Level
+                                        3:</span><strong>{{selectedRecord.billAddressLevel3}}</strong></div>
+                                <div class="charge-item"><span>Business
+                                        Number:</span><strong>{{selectedRecord.billBusinessNumber}}</strong></div>
+                                <div class="charge-item"><span>Surcharges &
+                                        OCCs:</span><strong>{{selectedRecord.surchargesAndOccs}}</strong>
+                                </div>
+                                <div class="charge-item">
+                                    <span>Taxes, Gov. Surcharges &
+                                        Fees:</span><strong>{{selectedRecord.taxesGovSurchargesAndFees}}</strong>
+                                </div>
+                                <div class="charge-item">
+                                    <span>Minutes:</span><strong>{{selectedRecord.totalMinutesUsage}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="invoiceDetails.batchDetails?.carrier === 'FirstNet'">
+                                    <span>MDA:</span><strong>{{selectedRecord.udl4}}</strong>
+                                </div>
+                                <div class="charge-item"
+                                    *ngIf="invoiceDetails.batchDetails?.carrier === 'AT&T Mobility'">
+                                    <span>Asset Tag:</span><strong>{{selectedRecord.assetTag}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Charges Breakdown</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Account Charges &
+                                        Credits:</span><strong>{{selectedRecord.accountChargesAndCredits |
+                                        currency}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Previous
+                                        Balance:</span><strong>{{selectedRecord.previousBalance | currency}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Payments:</span><strong>{{selectedRecord.payments |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Balance
+                                        Forward:</span><strong>{{selectedRecord.balanceForward | currency}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Monthly
+                                        Charges:</span><strong>{{selectedRecord.monthlyCharges | currency}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Equipment
+                                        Charges:</span><strong>{{selectedRecord.equipmentCharges | currency}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Adjustments:</span><strong>{{selectedRecord.adjustments |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Late Fees:</span><strong>{{selectedRecord.lateFee |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Third Party Charges to
+                                        Account:</span><strong>{{selectedRecord.thirdPartyChargesToAccount |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Third Party Charges to
+                                        Lines:</span><strong>{{selectedRecord.thirdPartyChargesToLines |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Usage and Purchase
+                                        Charges:</span><strong>{{selectedRecord.usageAndPurchaseCharges |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Usage
+                                        Charges:</span><strong>{{selectedRecord.usageChargesData |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Usage Charges
+                                        Purchases:</span><strong>{{selectedRecord.usageChargesPurchases |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Usage Charges
+                                        Roaming:</span><strong>{{selectedRecord.usageChargesRoaming |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Usage Charges
+                                        Voice:</span><strong>{{selectedRecord.usageChargesVoice |
+                                        currency}}</strong></div>
+                                <div class="charge-item"><span>Total Reoccurring
+                                        Charges:</span><strong>{{selectedRecord.totalReoccurringCharges |
+                                        currency}}</strong></div>
+                                <div class="charge-item total"><span>Total Current
+                                        Charges:</span><strong>{{selectedRecord.totalCurrentCharges |
+                                        currency}}</strong></div>
+                                <div class="charge-item total"><span>Total Amount
+                                        Due:</span><strong>{{selectedRecord.totalAmountDue | currency}}</strong></div>
+                            </div>
+                        </div>
+                    </ng-container>
+
                 </mat-card-content>
             </mat-card>
 
@@ -141,7 +280,8 @@
                         {{ invoiceDetails.batchDetails?.status === 'REJECTED' ? 'Invoice Rejected' : 'Invoice Failed' }}
                     </mat-card-title>
                     <mat-card-subtitle>
-                        {{ invoiceDetails.batchDetails?.status === 'REJECTED' ? 'This invoice detailed report was rejected.' : 'This invoice detailed report could not be processed.' }}
+                        {{ invoiceDetails.batchDetails?.status === 'REJECTED' ? 'This invoice detailed report was
+                        rejected.' : 'This invoice detailed report could not be processed.' }}
                     </mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>

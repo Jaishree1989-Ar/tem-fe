@@ -28,165 +28,441 @@
                 <mat-list-item *ngFor="let record of dataSource.connect() | async" (click)="selectRecord(record)"
                     [class.selected]="record === selectedRecord">
                     <mat-icon matListItemIcon>person</mat-icon>
-                    <div matListItemTitle>{{record.wirelessUserName || '-'}}</div>
-                    <div matListItemLine>{{record.wirelessNumber}}</div>
+                    <div matListItemTitle>{{ record.userName || record.wirelessUserName || '-'}}</div>
+                    <div matListItemLine>{{ record.wirelessNumber }}</div>
                 </mat-list-item>
             </mat-nav-list>
         </div>
 
         <div class="detail-pane">
             <mat-card class="detail-card" *ngIf="selectedRecord; else noSelection">
-                <mat-card-header>
-                    <mat-icon mat-card-avatar>description</mat-icon>
-                    <mat-card-title>{{ selectedRecord.billingAccountName }}</mat-card-title>
-                    <mat-card-subtitle>Wireless #: {{ selectedRecord.wirelessNumber }}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content class="detail-grid">
-                    <div class="detail-group">
-                        <h4 class="group-title">Account & User</h4>
-                        <div class="detail-item"><mat-icon>corporate_fare</mat-icon>
-                            <div><strong>FAN:</strong> {{selectedRecord.foundationAccount || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>business</mat-icon>
-                            <div><strong>FAN Name:</strong> {{selectedRecord.foundationAccountName || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>person</mat-icon>
-                            <div><strong>User Name:</strong> {{selectedRecord.wirelessUserName || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>email</mat-icon>
-                            <div><strong>Email:</strong> {{selectedRecord.emailAddress || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>phone_iphone</mat-icon>
-                            <div><strong>Wireless #:</strong> {{selectedRecord.wirelessNumber || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>business</mat-icon>
-                            <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>pin_drop</mat-icon>
-                            <div><strong>Primary Place of Use:</strong> {{selectedRecord.primaryPlaceOfUse || '-'}}
+                <!-- View for Verizon Wireless -->
+                <ng-container *ngIf="inventoryDetails.batchDetails.carrier === 'Verizon Wireless'">
+                    <mat-card-header>
+                        <mat-icon mat-card-avatar>description</mat-icon>
+                        <mat-card-title>{{ selectedRecord.accountName }}</mat-card-title>
+                        <mat-card-subtitle>Wireless #: {{ selectedRecord.wirelessNumber }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content class="detail-grid">
+                        <div class="detail-group">
+                            <h4 class="group-title">Account & User</h4>
+                            <div class="detail-item"><mat-icon>corporate_fare</mat-icon>
+                                <div><strong>Profile Name:</strong> {{selectedRecord.profileName || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>vpn_key</mat-icon>
+                                <div><strong>Profile ID:</strong> {{selectedRecord.profileId || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>person</mat-icon>
+                                <div><strong>User Name:</strong> {{selectedRecord.userName || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>badge</mat-icon>
+                                <div><strong>User ID:</strong> {{selectedRecord.userId || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>email</mat-icon>
+                                <div><strong>Email:</strong> {{selectedRecord.emailAddress || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>phone_iphone</mat-icon>
+                                <div><strong>Wireless #:</strong> {{selectedRecord.wirelessNumber || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>business</mat-icon>
+                                <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>pin</mat-icon>
+                                <div><strong>Cost Center:</strong> {{selectedRecord.costCenter || '-'}}</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="detail-group">
-                        <h4 class="group-title">Billing & Plan</h4>
-                        <div class="detail-item"><mat-icon>confirmation_number</mat-icon>
-                            <div><strong>Billing Account #:</strong> {{selectedRecord.billingAccountNumber || '-'}}
-                            </div>
-                        </div>
-                        <div class="detail-item"><mat-icon>event</mat-icon>
-                            <div><strong>Activation Date:</strong> {{selectedRecord.activationDate | date: 'longDate'}}
-                            </div>
-                        </div>
-                        <div class="detail-item"><mat-icon>article</mat-icon>
-                            <div><strong>Rate Plan:</strong> {{selectedRecord.ratePlanName}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>code</mat-icon>
-                            <div><strong>Rate Plan SOC:</strong> {{selectedRecord.ratePlanSocName}}</div>
-                        </div>
-                    </div>
 
-                    <div class="detail-group">
-                        <h4 class="group-title">Device Information</h4>
-                        <div class="detail-item"><mat-icon>devices</mat-icon>
-                            <div><strong>Device Type:</strong> {{selectedRecord.deviceType || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>badge</mat-icon>
-                            <div><strong>Asset Tag:</strong> {{selectedRecord.assetTag || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>perm_device_information</mat-icon>
-                            <div><strong>Device IMEI:</strong> {{selectedRecord.deviceImei || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>system_update</mat-icon>
-                            <div><strong>OS:</strong> {{selectedRecord.operatingSystem || '-'}}</div>
-                        </div>
-                    </div>
-
-                    <div class="detail-group">
-                        <h4 class="group-title">SIM Information</h4>
-                        <div class="detail-item"><mat-icon>sim_card</mat-icon>
-                            <div><strong>SIM (ICCID):</strong> {{selectedRecord.simNumberIccid || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>sim_card_download</mat-icon>
-                            <div><strong>SIM Type:</strong> {{selectedRecord.simType || '-'}}</div>
-                        </div>
-                        <div class="detail-item"><mat-icon>network_check</mat-icon>
-                            <div><strong>SIM Network:</strong> {{selectedRecord.simNetwork || '-'}}</div>
-                        </div>
-                    </div>
-
-                    <div class="detail-group full-width">
-                        <h4 class="group-title">Contract Information</h4>
-                        <div class="charges-grid">
-                            <div class="charge-item"><span>Contract
-                                    Type:</span><strong>{{selectedRecord.contractType || '-'}}</strong></div>
-                            <div class="charge-item"><span>Contract
-                                    Status:</span><strong>{{selectedRecord.contractStatus || '-'}}</strong></div>
-                            <div class="charge-item"><span>Contract
-                                    Start:</span><strong>{{ (selectedRecord.contractStartDate | date:
-                                    'longDate') || '-'}}</strong></div>
-                            <div class="charge-item"><span>Contract End:</span><strong>{{(selectedRecord.contractEndDate
-                                    | date: 'longDate') || '-'}}</strong></div>
-                            <div class="charge-item"><span>Contract
-                                    Term:</span><strong>{{selectedRecord.contractTerm || '-'}}</strong></div>
-                        </div>
-                    </div>
-
-                    <div class="detail-group full-width">
-                        <h4 class="group-title">Status Information</h4>
-                        <div class="charges-grid">
-                            <div class="charge-item"><span>Status:</span><strong>{{selectedRecord.deviceStatus ||
-                                    '-'}}</strong>
+                        <div class="detail-group">
+                            <h4 class="group-title">Billing & Charges</h4>
+                            <div class="detail-item"><mat-icon>confirmation_number</mat-icon>
+                                <div><strong>Account #:</strong> {{selectedRecord.accountNumber || '-'}}
+                                </div>
                             </div>
-                            <div class="charge-item"><span>Status
-                                    Effective:</span><strong>{{ (selectedRecord.statusEffectiveDate | date:
-                                    'longDate') || '-'}}</strong></div>
-                            <div class="charge-item"><span>Last Updated:</span><strong>{{
-                                    (selectedRecord.lastUpdatedDate
-                                    | date: 'longDate') || '-'}}</strong></div>
-                            <div class="charge-item"><span>Last Upgrade:</span><strong>{{
-                                    (selectedRecord.lastUpgradeDate
-                                    | date: 'longDate') || '-'}}</strong></div>
-                            <div class="charge-item"><span>Upgrade In
-                                    Progress:</span><strong>{{selectedRecord.upgradeInProgress || '-'}}</strong></div>
-                        </div>
-                    </div>
-
-                    <div class="detail-group full-width">
-                        <h4 class="group-title">Other Information</h4>
-                        <div class="charges-grid">
-                            <div class="charge-item" *ngIf="selectedRecord.deviceImeiNetwork"><span>Device IMEI
-                                    Network:</span><strong>{{selectedRecord.deviceImeiNetwork ||
-                                    '-'}}</strong>
+                            <div class="detail-item"><mat-icon>event</mat-icon>
+                                <div><strong>Bill Cycle Date:</strong> {{selectedRecord.billCycleDate | date:
+                                    'longDate'}}
+                                </div>
                             </div>
-                            <div class="charge-item" *ngIf="selectedRecord.deviceMake"><span>Device Make:</span><strong>{{selectedRecord.deviceMake ||
-                                    '-'}}</strong></div>
-                            <div class="charge-item" *ngIf="selectedRecord.deviceMakeNetwork"><span>Device Make
-                                    Network:</span><strong>{{selectedRecord.deviceMakeNetwork || '-'}}</strong></div>
-                            <div class="charge-item" *ngIf="selectedRecord.deviceModelNetwork"><span>Device Model
-                                    Network:</span><strong>{{selectedRecord.deviceModelNetwork || '-'}}</strong></div>
-                            <div class="charge-item"><span>Device Model:</span><strong>{{selectedRecord.deviceModel ||
-                                    '-'}}</strong></div>
-                            <div class="charge-item"><span>Group Id:</span><strong>{{selectedRecord.groupId ||
-                                    '-'}}</strong></div>
-                            <div class="charge-item"><span>Group Line SOC
-                                    Name:</span><strong>{{selectedRecord.groupLineSocName || '-'}}</strong></div>
-                            <div class="charge-item"><span>Group Plan SOC
-                                    Name:</span><strong>{{selectedRecord.groupPlanSocName || '-'}}</strong></div>
-                            <div class="charge-item"><span>Imei Software
-                                    Version:</span><strong>{{selectedRecord.imeiSoftwareVersion || '-'}}</strong></div>
-                            <div class="charge-item" *ngIf="selectedRecord.networkImeiMismatch"><span>Network Imei
-                                    Mismatch:</span><strong>{{selectedRecord.networkImeiMismatch || '-'}}</strong></div>
-                            <div class="charge-item" *ngIf="selectedRecord.udl2"><span>Viscode:</span><strong>{{selectedRecord.udl2 ||
-                                    '-'}}</strong></div>
-                            <div class="charge-item" *ngIf="selectedRecord.visCode"><span>Viscode:</span><strong>{{selectedRecord.visCode ||
-                                    '-'}}</strong></div>
-                            <div class="charge-item" *ngIf="selectedRecord.udl4"><span>MDA:</span><strong>{{selectedRecord.udl4 || '-'}}</strong>
+                            <div class="detail-item"><mat-icon>receipt</mat-icon>
+                                <div><strong>Total Current Charges:</strong> {{selectedRecord.totalCurrentCharges || '-'
+                                    | currency}}</div>
                             </div>
-                            <div class="charge-item" *ngIf="selectedRecord.pcn"><span>PCN:</span><strong>{{selectedRecord.pcn || '-'}}</strong>
+                            <div class="detail-item"><mat-icon>toll</mat-icon>
+                                <div><strong>Monthly Access:</strong> {{selectedRecord.monthlyAccessCharges || '-' |
+                                    currency}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>phone</mat-icon>
+                                <div><strong>Voice Access Charge:</strong> {{selectedRecord.voiceAccessCharge || '-' |
+                                    currency}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>network_cell</mat-icon>
+                                <div><strong>Data Access Charge:</strong> {{selectedRecord.dataAccessCharge || '-' |
+                                    currency}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>shopping_cart</mat-icon>
+                                <div><strong>Equipment Charges:</strong> {{selectedRecord.equipmentCharges || '-' |
+                                    currency}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>money_off</mat-icon>
+                                <div><strong>Taxes & Surcharges:</strong> {{selectedRecord.taxesAndSurcharges || '-' |
+                                    currency}}</div>
                             </div>
                         </div>
-                    </div>
-                </mat-card-content>
+
+                        <div class="detail-group">
+                            <h4 class="group-title">Plan Details</h4>
+                            <div class="detail-item"><mat-icon>article</mat-icon>
+                                <div><strong>Rate Plan:</strong> {{selectedRecord.pricePlanDescription || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>code</mat-icon>
+                                <div><strong>Rate Plan ID:</strong> {{selectedRecord.pricePlanId || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>data_usage</mat-icon>
+                                <div><strong>Data Plan:</strong> {{selectedRecord.dataPlan || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>unlimited</mat-icon>
+                                <div><strong>Data Plan Allowance:</strong> {{selectedRecord.dataPlanAllowance || '-'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>call_to_action</mat-icon>
+                                <div><strong>Voice Allowance:</strong> {{selectedRecord.voiceAllowance || '-'}}</div>
+                            </div>
+                        </div>
+
+
+                        <div class="detail-group">
+                            <h4 class="group-title">Device Information</h4>
+                            <div class="detail-item"><mat-icon>devices</mat-icon>
+                                <div><strong>Device Make:</strong> {{selectedRecord.deviceManufacturer || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>devices</mat-icon>
+                                <div><strong>Device Model:</strong> {{selectedRecord.deviceModel || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>category</mat-icon>
+                                <div><strong>Device Type:</strong> {{selectedRecord.deviceType || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>perm_device_information</mat-icon>
+                                <div><strong>Device IMEI:</strong> {{selectedRecord.currentDeviceId4gOnly || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>date_range</mat-icon>
+                                <div><strong>Activation Date:</strong> {{selectedRecord.activationDate | date:
+                                    'longDate'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>vpn_key_off</mat-icon>
+                                <div><strong>NE2 Date:</strong> {{selectedRecord.ne2Date | date: 'longDate'}}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">SIM and Charges Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>SIM (ICCID):</span><strong>{{ selectedRecord.sim ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>SIM Type:</span><strong>{{ selectedRecord.simType ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Device SIM 4G:</span><strong>{{
+                                        selectedRecord.deviceSim4g || '-'}}</strong></div>
+                                <div class="charge-item"><span>Account Charges:</span><strong>{{
+                                        selectedRecord.accountCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Additional Charges:</span><strong>{{
+                                        selectedRecord.additionalChargesData || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Current Data Charges:</span><strong>{{
+                                        selectedRecord.currentDataCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Data Charges Home:</span><strong>{{
+                                        selectedRecord.dataChargesHome || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Data Overage Charges:</span><strong>{{
+                                        selectedRecord.dataOverageCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Delayed Data Charges:</span><strong>{{
+                                        selectedRecord.delayedDataCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Economic Adjustment Charge:</span><strong>{{
+                                        selectedRecord.economicAdjustmentCharge || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>International Charges:</span><strong>{{
+                                        selectedRecord.internationalCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Long Distance Other Charges:</span><strong>{{
+                                        selectedRecord.longDistanceOtherCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Messaging Charges:</span><strong>{{
+                                        selectedRecord.messagingCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Third Party Charges:</span><strong>{{
+                                        selectedRecord.thirdPartyCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Total Data Usage Charges:</span><strong>{{
+                                        selectedRecord.totalDataUsageCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Total Additional Charges:</span><strong>{{
+                                        selectedRecord.totalAdditionalCharges || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Additional Services:</span><strong>{{
+                                        selectedRecord.additionalServicesDataUsage || '-' | currency}}</strong></div>
+                                <div class="charge-item"><span>Additional Services Messaging:</span><strong>{{
+                                        selectedRecord.additionalServicesMessagingUsage || '-' | currency}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Early Upgrade Indicator:</span><strong>{{
+                                        selectedRecord.earlyUpgradeIndicator || '-'}}</strong></div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Other Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Phones:</span><strong>{{ selectedRecord.phones ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Minutes:</span><strong>{{ selectedRecord.minutes ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Mobile to Mobile Allowance Minutes:</span><strong>{{
+                                        selectedRecord.mobileToMobileAllowanceMinutes ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Mobile to Mobile Minutes:</span><strong>{{
+                                        selectedRecord.mobileToMobileMinutes ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Mobile to Mobile Minutes Total:</span><strong>{{
+                                        selectedRecord.mobileToMobileMinutesTotal ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Mobile to Mobile Used Minutes:</span><strong>{{
+                                        selectedRecord.mobileToMobileUsedMinutes ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Monthly Non-Recurring Charges:</span><strong>{{
+                                        selectedRecord.monthlyNonRecurringCharges ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Other Charges and Credits:</span><strong>{{
+                                        selectedRecord.otherChargesAndCredits ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Preferred Roaming List:</span><strong>{{
+                                        selectedRecord.preferredRoamList ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Preferred Roaming List Last Update:</span><strong>{{
+                                        selectedRecord.preferredRoamListLastUpdate ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Purchase Charges:</span><strong>{{
+                                        selectedRecord.purchaseCharges ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Serial Number (Dual SIM Devices Only):</span><strong>{{
+                                        selectedRecord.serialNumberDualSimDevicesOnly ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Shipped Device ID:</span><strong>{{
+                                        selectedRecord.shippedDeviceId ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Other Charges and Credits:</span><strong>{{
+                                        selectedRecord.otherChargesAndCredits ||
+                                        '-'}}</strong></div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Usage Details</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Data Usage:</span><strong>{{ selectedRecord.dataUsage ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Total Allowance Minutes:</span><strong>{{
+                                        selectedRecord.totalAllowanceMinutes || '-'}}</strong></div>
+                                <div class="charge-item"><span>Used Minutes:</span><strong>{{ selectedRecord.usedMinutes
+                                        || '-'}}</strong></div>
+                                <div class="charge-item"><span>Billable Minutes:</span><strong>{{
+                                        selectedRecord.billableMinutes || '-'}}</strong></div>
+                                <div class="charge-item"><span>Total Call Detail:</span><strong>{{
+                                        selectedRecord.totalCallDetail || '-'}}</strong></div>
+                                <div class="charge-item"><span>Usage & Purchase Charges:</span><strong>{{
+                                        selectedRecord.usageAndPurchaseCharges || '-' | currency}}</strong></div>
+                            </div>
+                        </div>
+
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Status Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item">
+                                    <span>Status:</span><strong>{{selectedRecord.wirelessNumberStatus ||
+                                        '-'}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Upgrade Eligibility:</span><strong>{{
+                                        (selectedRecord.upgradeEligibilityDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Device Change Latest Date:</span><strong>{{
+                                        (selectedRecord.deviceChangeLatestDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Device Change Reason:</span><strong>{{
+                                        selectedRecord.deviceChangeReasonDescription || '-'}}</strong></div>
+                                <div class="charge-item"><span>Disconnect Date:</span><strong>{{
+                                        (selectedRecord.wirelessNumberDisconnectDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Suspend Date:</span><strong>{{
+                                        (selectedRecord.wirelessNumberSuspendDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Resume Date:</span><strong>{{
+                                        (selectedRecord.wirelessNumberResumeDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Suspend Description:</span><strong>{{
+                                        selectedRecord.wirelessNumberSuspendDescription || '-'}}</strong></div>
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+                </ng-container>
+
+                <ng-container *ngIf="inventoryDetails.batchDetails.carrier !== 'Verizon Wireless'">
+                    <mat-card-header>
+                        <mat-icon mat-card-avatar>description</mat-icon>
+                        <mat-card-title>{{ selectedRecord.billingAccountName }}</mat-card-title>
+                        <mat-card-subtitle>Wireless #: {{ selectedRecord.wirelessNumber }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content class="detail-grid">
+                        <div class="detail-group">
+                            <h4 class="group-title">Account & User</h4>
+                            <div class="detail-item"><mat-icon>corporate_fare</mat-icon>
+                                <div><strong>FAN:</strong> {{selectedRecord.foundationAccount || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>business</mat-icon>
+                                <div><strong>FAN Name:</strong> {{selectedRecord.foundationAccountName || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>person</mat-icon>
+                                <div><strong>User Name:</strong> {{selectedRecord.wirelessUserName || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>email</mat-icon>
+                                <div><strong>Email:</strong> {{selectedRecord.emailAddress || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>phone_iphone</mat-icon>
+                                <div><strong>Wireless #:</strong> {{selectedRecord.wirelessNumber || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>business</mat-icon>
+                                <div><strong>Department:</strong> {{selectedRecord.department || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>pin_drop</mat-icon>
+                                <div><strong>Primary Place of Use:</strong> {{selectedRecord.primaryPlaceOfUse || '-'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-group">
+                            <h4 class="group-title">Billing & Plan</h4>
+                            <div class="detail-item"><mat-icon>confirmation_number</mat-icon>
+                                <div><strong>Billing Account #:</strong> {{selectedRecord.billingAccountNumber || '-'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>event</mat-icon>
+                                <div><strong>Activation Date:</strong> {{selectedRecord.activationDate | date:
+                                    'longDate'}}
+                                </div>
+                            </div>
+                            <div class="detail-item"><mat-icon>article</mat-icon>
+                                <div><strong>Rate Plan:</strong> {{selectedRecord.ratePlanName}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>code</mat-icon>
+                                <div><strong>Rate Plan SOC:</strong> {{selectedRecord.ratePlanSocName}}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group">
+                            <h4 class="group-title">Device Information</h4>
+                            <div class="detail-item"><mat-icon>devices</mat-icon>
+                                <div><strong>Device Type:</strong> {{selectedRecord.deviceType || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>badge</mat-icon>
+                                <div><strong>Asset Tag:</strong> {{selectedRecord.assetTag || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>perm_device_information</mat-icon>
+                                <div><strong>Device IMEI:</strong> {{selectedRecord.deviceImei || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>system_update</mat-icon>
+                                <div><strong>OS:</strong> {{selectedRecord.operatingSystem || '-'}}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group">
+                            <h4 class="group-title">SIM Information</h4>
+                            <div class="detail-item"><mat-icon>sim_card</mat-icon>
+                                <div><strong>SIM (ICCID):</strong> {{selectedRecord.simNumberIccid || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>sim_card_download</mat-icon>
+                                <div><strong>SIM Type:</strong> {{selectedRecord.simType || '-'}}</div>
+                            </div>
+                            <div class="detail-item"><mat-icon>network_check</mat-icon>
+                                <div><strong>SIM Network:</strong> {{selectedRecord.simNetwork || '-'}}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Contract Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Contract
+                                        Type:</span><strong>{{selectedRecord.contractType || '-'}}</strong></div>
+                                <div class="charge-item"><span>Contract
+                                        Status:</span><strong>{{selectedRecord.contractStatus || '-'}}</strong></div>
+                                <div class="charge-item"><span>Contract
+                                        Start:</span><strong>{{ (selectedRecord.contractStartDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Contract
+                                        End:</span><strong>{{(selectedRecord.contractEndDate
+                                        | date: 'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Contract
+                                        Term:</span><strong>{{selectedRecord.contractTerm || '-'}}</strong></div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Status Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item"><span>Status:</span><strong>{{selectedRecord.deviceStatus ||
+                                        '-'}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Status
+                                        Effective:</span><strong>{{ (selectedRecord.statusEffectiveDate | date:
+                                        'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Last Updated:</span><strong>{{
+                                        (selectedRecord.lastUpdatedDate
+                                        | date: 'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Last Upgrade:</span><strong>{{
+                                        (selectedRecord.lastUpgradeDate
+                                        | date: 'longDate') || '-'}}</strong></div>
+                                <div class="charge-item"><span>Upgrade In
+                                        Progress:</span><strong>{{selectedRecord.upgradeInProgress || '-'}}</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-group full-width">
+                            <h4 class="group-title">Other Information</h4>
+                            <div class="charges-grid">
+                                <div class="charge-item" *ngIf="selectedRecord.deviceImeiNetwork"><span>Device IMEI
+                                        Network:</span><strong>{{selectedRecord.deviceImeiNetwork ||
+                                        '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.deviceMake"><span>Device
+                                        Make:</span><strong>{{selectedRecord.deviceMake ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item" *ngIf="selectedRecord.deviceMakeNetwork"><span>Device Make
+                                        Network:</span><strong>{{selectedRecord.deviceMakeNetwork || '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.deviceModelNetwork"><span>Device Model
+                                        Network:</span><strong>{{selectedRecord.deviceModelNetwork || '-'}}</strong>
+                                </div>
+                                <div class="charge-item"><span>Device Model:</span><strong>{{selectedRecord.deviceModel
+                                        ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Group Id:</span><strong>{{selectedRecord.groupId ||
+                                        '-'}}</strong></div>
+                                <div class="charge-item"><span>Group Line SOC
+                                        Name:</span><strong>{{selectedRecord.groupLineSocName || '-'}}</strong></div>
+                                <div class="charge-item"><span>Group Plan SOC
+                                        Name:</span><strong>{{selectedRecord.groupPlanSocName || '-'}}</strong></div>
+                                <div class="charge-item"><span>Imei Software
+                                        Version:</span><strong>{{selectedRecord.imeiSoftwareVersion || '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.networkImeiMismatch"><span>Network Imei
+                                        Mismatch:</span><strong>{{selectedRecord.networkImeiMismatch || '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.udl2">
+                                    <span>Viscode:</span><strong>{{selectedRecord.udl2 ||
+                                        '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.visCode">
+                                    <span>Viscode:</span><strong>{{selectedRecord.visCode ||
+                                        '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.udl4">
+                                    <span>MDA:</span><strong>{{selectedRecord.udl4 || '-'}}</strong>
+                                </div>
+                                <div class="charge-item" *ngIf="selectedRecord.pcn">
+                                    <span>PCN:</span><strong>{{selectedRecord.pcn || '-'}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </ng-container>
             </mat-card>
 
             <ng-template #noSelection>
@@ -211,7 +487,8 @@
                         Processing Failed' }}
                     </mat-card-title>
                     <mat-card-subtitle>
-                        {{ inventoryDetails.batchDetails?.status === 'REJECTED' ? 'This inventory detailed report was rejected.' :
+                        {{ inventoryDetails.batchDetails?.status === 'REJECTED' ? 'This inventory detailed report was
+                        rejected.' :
                         'This inventory detailed report could not be processed.' }}
                     </mat-card-subtitle>
                 </mat-card-header>

@@ -97,5 +97,9 @@ export const SNACKBAR_MESSAGES = {
 
   // Recurring charges
   RECURRING_CHARGES_UPDATED: 'Recurring charges updated successfully.', 
-  RECURRING_CHARGES_UPDATE_FAILED: 'Failed to update recurring charges. Please try again.'
+  RECURRING_CHARGES_UPDATE_FAILED: 'Failed to update recurring charges. Please try again.',
+
+  // Viscode update
+  VISCODE_UPDATED: 'Viscode updated successfully.',
+  VISCODE_UPDATE_FAILED: 'Failed to update viscode. Please try again.',
 };

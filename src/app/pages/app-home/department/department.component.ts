@@ -32,6 +32,7 @@ export class DepartmentComponent implements AfterViewInit {
   departments: DepartmentAccount[] = [];
   accessType: string = 'WRITE';
   displayedColumns: string[] = ['foundationAccountNumber', 'departmentAccountNumber', 'department', 'createdBy', 'actions'];
+  displayedColumnsVerizon: string[] = ['departmentAccountNumber', 'department', 'createdBy', 'actions'];
   firstNetDataSource = new MatTableDataSource<DepartmentAccount>();
   attDataSource = new MatTableDataSource<DepartmentAccount>();
   verizonDataSource = new MatTableDataSource<DepartmentAccount>();

@@ -41,6 +41,13 @@
                 "routerLink": "wireless-reports",
                 "canShow": false,
                 "accessType": ""
+            },
+            {
+                "text": "Wired Reports",
+                "icon": "settings_ethernet",
+                "routerLink": "wired-reports",
+                "canShow": false,
+                "accessType": ""
             }
         ]
     },

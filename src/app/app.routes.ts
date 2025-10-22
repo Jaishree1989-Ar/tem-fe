@@ -140,7 +140,16 @@ export const routes: Routes = [
         path: 'invoice-upload',
         loadComponent: () => import('./pages/app-home/invoice-data-upload/invoice-data-upload.component').then(m => m.InvoiceDataUploadComponent),
         canActivate: [authGuard]
-      }
+      },
+
+      /**
+       * Wired reports page - Protected
+       */
+      {
+        path: 'wired-reports',
+        loadComponent: () => import('./pages/app-home/wired-reports/wired-reports.component').then(m => m.WiredReportsComponent),
+        canActivate: [authGuard]
+      },
     ]
   }
 ];

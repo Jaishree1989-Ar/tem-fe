@@ -151,12 +151,59 @@ export class InvoicesComponent implements OnInit, AfterViewInit {
         'totalReoccurringCharges',
       ]
     },
-    'Verizon': {
+    'Verizon Wireless': {
       displayedColumns: [
+        'department',
+        'accountNumber',
+        'invoiceNumber',
+        'monthlyCharges'
       ],
       overallColumnArr1: [
+        'invoiceNumber',
+        'accountNumber',
+        'accountStatusCode',
+        'accountStatusDescription',
+        'billAccountCreateDate',
+        'department',
+        'billAddressLevel2',
+        'billAddressLevel3',
+        'billBusinessNumber',
+        'billCity',
+        'billContactName',
+        'billContactNumber',
+        'billState',
+        'billZip',
+        'recurringPaymentMethod',
+        'recurringPaymentSetup',
+        'accountChargesAndCredits',
+        'accountLevelShare',
+        'adjustments',
+        'balanceForward',
+        'equipmentCharges',
+        'lateFee',
+        'monthlyCharges',
       ],
       overallColumnArr2: [
+        'payments',
+        'previousBalance',
+        'surchargesAndOccs',
+        'taxesGovSurchargesAndFees',
+        'thirdPartyChargesToAccount',
+        'thirdPartyChargesToLines',
+        'totalAmountDue',
+        'totalCurrentCharges',
+        'usageAndPurchaseCharges',
+        'usageChargesData',
+        'usageChargesPurchases',
+        'usageChargesRoaming',
+        'usageChargesVoice',
+        'billName',
+        'billPeriod',
+        'billPeriodStart',
+        'billPeriodEnd',
+        'dateDue',
+        'remittanceAddress',
+        'totalReoccurringCharges'
       ]
     }
   };

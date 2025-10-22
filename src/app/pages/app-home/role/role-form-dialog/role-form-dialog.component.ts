@@ -25,7 +25,7 @@ export class RoleFormDialogComponent {
   roleForm!: FormGroup;
   isEditMode: boolean = false;
 
-  moduleOptions = ['Dashboard', 'Invoices', 'Telecom Reports', 'Wireless Reports', 'User', 'Role', 'Manage Data', 'Inventory', 'Manage Dept'];
+  moduleOptions = ['Dashboard', 'Invoices', 'Telecom Reports', 'Wireless Reports', 'User', 'Role', 'Manage Data', 'Inventory', 'Manage Dept', 'Wired Reports'];
   accessTypes = ['READ', 'WRITE'];
 
   constructor(
